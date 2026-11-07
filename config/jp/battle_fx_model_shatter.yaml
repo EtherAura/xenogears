@@ -1,0 +1,14 @@
+name: "Battle effect helper 0E/05: a 3D model shattering into polygons (opcode 0x1D)"
+sha1: 73028b22b6a16aecaa3e4e4a3c43eeb9765304aa
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_model_shatter
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, .rodata, fx_801FC074]            # 0x801FC000
+      - [0x74, c, fx_801FC074]                 # 0x801FC074
+      - [0xE04, data, data]                     # 0x801FCE04
+  - [0xE0C]

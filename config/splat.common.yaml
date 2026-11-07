@@ -1,0 +1,39 @@
+# Options shared by every splat run. tools/configure.py merges, in order:
+#   config/splat.common.yaml     (this file)
+#   config/<ver>/splat.yaml      (version-wide: gp, encodings)
+#   build/<ver>/splat/<mod>.paths.yaml   (generated: per-module paths)
+#   config/<ver>/<mod>.yaml      (module: sha1 + segments)
+# Lists are appended across files; scalars are overridden by later files.
+options:
+  base_path: ..
+  platform: psx
+  compiler: PSYQ
+  # Project segment types (linkfill: linker fill between objects).
+  extensions_path: tools/splat_ext
+
+  # Retail binaries lay sections out as rodata, text, data, bss.
+  section_order: [".rodata", ".text", ".data", ".bss"]
+  subalign: 4
+  # Retail sections are only word-aligned; never pad section/segment ends.
+  ld_align_section_vram_end: False
+  ld_align_segment_vram_end: False
+  ld_bss_is_noload: True
+  find_file_boundaries: False
+  migrate_rodata_to_functions: True
+
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  # include/*.inc and include_asm.h were generated once by splat and are now
+  # maintained in the repo.
+  generate_asm_macros_files: False
+  use_legacy_include_asm: False
+  o_as_suffix: False
+
+  # Code and data live between the executable base and the top of a dev
+  # kit's 8 MB RAM (the debug modules load at 0x80280000).
+  global_vram_start: 0x80010000
+  global_vram_end: 0x80800000
+
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2

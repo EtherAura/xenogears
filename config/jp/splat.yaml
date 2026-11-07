@@ -1,0 +1,8 @@
+# Version-wide splat options for the Japanese release.
+options:
+  # Set by the executable's entry point (0x800195E4).
+  gp_value: 0x80058810
+  # Kept ASCII so non-ASCII (Shift-JIS) text is emitted as bytes, which
+  # always reassembles exactly.
+  string_encoding: ASCII
+  data_string_encoding: ASCII

@@ -1,0 +1,19 @@
+name: Gear shop menu (10/0A, Noah menu5)
+sha1: 5ab0b2d9f0c120c35a4aad50bef73b040c6ad5ad
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: menu_gear_shop
+    type: code
+    start: 0x0
+    vram: 0x801C5000
+    subsegments:
+      - [0x0, .rodata, gs_801C511C]
+      - [0x10, .rodata, gs_801CDC68]
+      - [0x4C, linkfill]                  # linker fill
+      - [0x50, .rodata, gs_801D1304]
+      - [0x11C, c, gs_801C511C]
+      - [0x8CA4, c, gs_801CDC68]
+      - [0xC340, c, gs_801D1304]
+      - [0x119B8, data, data]
+  - [0x140DC]

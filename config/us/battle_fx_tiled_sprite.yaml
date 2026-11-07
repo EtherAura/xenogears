@@ -1,0 +1,11 @@
+name: "Battle effect helper 0E/06: actor tiled across the screen (opcode 0x24)"
+sha1: 774c1c29eed1b0b966b1a59b703e34bd4ec81b45
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_tiled_sprite
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+  - [0x814]

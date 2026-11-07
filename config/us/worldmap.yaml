@@ -1,0 +1,44 @@
+name: World map overlay (01/0F)
+sha1: 5fee1deab3558c23bbe9c3a2eda3a2021a570911
+# Provisional source files, named by start address until their contents are
+# known. All code up to 0x8009980C was assembled by ASPSX >= 2.50 (`li` is
+# addiu); the last two functions by ASPSX < 2.50 (ori), so they are a file of
+# their own. Every divide keeps its checks; no $gp use. .rodata is jump
+# tables and one 4-byte constant (in .rodata, not .sdata: -G0). A jump table
+# sits 8-aligned from its object's .rodata start, so a change of address
+# parity between tables starts a new file; where such a file starts in .text
+# is the function boundary in its gap with the fewest crossing calls.
+segments:
+  - name: worldmap
+    type: code
+    start: 0x0
+    vram: 0x8006FAF0
+    subsegments:
+      - [0x0, rodata]                     # 0x8006FAF0 a word (no code reference found)
+      - [0x4, .rodata, w_80070CFC]        # 0x8006FAF4
+      - [0x50, .rodata, w_800736DC]       # 0x8006FB40
+      - [0xD4, .rodata, w_8007A06C]       # 0x8006FBC4
+      - [0x160, .rodata, w_8007BF50]      # 0x8006FC50
+      - [0x29C, .rodata, w_8007CC6C]      # 0x8006FD8C
+      - [0x6F0, .rodata, w_8007FD30]      # 0x800701E0
+      - [0x7F4, .rodata, w_80080578]      # 0x800702E4
+      - [0x9A0, .rodata, w_800834D0]      # 0x80070490
+      - [0xCBC, .rodata, w_8008BD1C]      # 0x800707AC
+      - [0xF08, .rodata, w_8008E034]      # 0x800709F8
+      - [0x1064, .rodata, w_800907F4]     # 0x80070B54
+      - [0x1160, .rodata, w_80094A5C]     # 0x80070C50
+      - [0x120C, c, w_80070CFC]           # 0x80070CFC
+      - [0x3BEC, c, w_800736DC]           # 0x800736DC
+      - [0xA57C, c, w_8007A06C]           # 0x8007A06C
+      - [0xC460, c, w_8007BF50]           # 0x8007BF50
+      - [0xD17C, c, w_8007CC6C]           # 0x8007CC6C
+      - [0x10240, c, w_8007FD30]          # 0x8007FD30
+      - [0x10A88, c, w_80080578]          # 0x80080578
+      - [0x139E0, c, w_800834D0]          # 0x800834D0
+      - [0x1C22C, c, w_8008BD1C]          # 0x8008BD1C
+      - [0x1E544, c, w_8008E034]          # 0x8008E034
+      - [0x20D04, c, w_800907F4]          # 0x800907F4
+      - [0x24F6C, c, w_80094A5C]          # 0x80094A5C
+      - [0x29D1C, c, w_8009980C]          # 0x8009980C ASPSX < 2.50
+      - [0x2A39C, data, data]             # 0x80099E8C
+  - [0x2C0C6]

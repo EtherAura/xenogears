@@ -1,0 +1,44 @@
+// Battle overlay globals the debugger reads by name.
+
+// ---- Noah names (naming pass, work/naming) ----
+battleVar2 = 0x800C3EAC;
+battleCurrentDamages = 0x800C3FE8;
+battleScriptContext = 0x800D2E5C;
+battleCameraEye = 0x800D3354;
+battleCameraAt = 0x800D335C;
+monstersScriptsEntities = 0x800D3400;
+setBattleCameraMode = 0x800BC2F0;
+drawBattleDebugTextPages = 0x8028022C; // type:func
+moveDebugCameraEye = 0x80280844; // type:func
+moveDebugCameraAt = 0x80280960; // type:func
+writeBattleHeapDump = 0x80281F98; // type:func
+updateBattleDebugger = 0x80280A9C; // type:func
+reinitDebugFontOnPadPress = 0x8028103C; // type:func
+updateDebugHeapViewer = 0x802810C4; // type:func
+updateDebugLoadMeter = 0x80281330; // type:func
+drawDebugMeterNeedle = 0x802813F4; // type:func
+drawDebugMeterTick = 0x802814F8; // type:func
+drawDebugMeterPeakLine = 0x802815E8; // type:func
+drawDebugLoadMeter = 0x802816AC; // type:func
+createDebugLoadMeter = 0x802818C4; // type:func
+printLoadedWdsList = 0x8028191C; // type:func
+updateDebugModelEditor = 0x80281980; // type:func
+dumpBattleHeap = 0x80281FD8; // type:func
+debugModelEditorActor = 0x800C3568;
+battleBssBlock = 0x800C3EB0;
+debugHeapViewerEnabled = 0x80282034;
+debugPerfInfoEnabled = 0x80282038;
+debugCameraViewEnabled = 0x80282040;
+debugGeomOffsetToggle = 0x80282044;
+debugHeapViewerFlags = 0x8028205C;
+debugHeapViewerScroll = 0x80282060;
+debugHeapViewerRepeatDelay = 0x80282064;
+debugHeapViewerCount = 0x80282068;
+debugLoadMeterNeedleVerts = 0x8028206C;
+debugModelEditorShift = 0x802820BB;
+debugModelEditorControlMode = 0x802820BC;
+debugModelEditorControlModeNames = 0x802820C0;
+battleHeapDumpCount = 0x802820D4;
+strBattleHeapDumpPath = 0x802820D8;
+debugCameraFrameCounter = 0x802820EC;
+battleCameraBlock = 0x800D309C;

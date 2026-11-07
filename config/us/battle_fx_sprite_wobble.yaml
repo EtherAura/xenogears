@@ -1,0 +1,11 @@
+name: "Battle effect helper 0E/04: cosine row wobble of an actor (opcode 0x19)"
+sha1: 34a41d882e6e9a64b9e9ebe92e2a05be46f622d2
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_sprite_wobble
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000 (the first 0x20 bytes are the update callback)
+  - [0x5E4]

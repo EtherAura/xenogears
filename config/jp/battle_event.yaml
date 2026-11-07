@@ -1,0 +1,15 @@
+name: Battle event module (20/01)
+sha1: dea0465574651b39958618c0bd0ace5089199423
+# The event interpreter and JP's own build of the sprite-actor tail (from
+# 0x801E9420), all gcc-2.6.3 and ASPSX < 2.50. No divide checks, no $gp.
+segments:
+  - name: battle_event
+    type: code
+    start: 0x0
+    vram: 0x801E5000
+    subsegments:
+      - [0x0, .rodata, be_801E5160]             # 0x801E5000
+      - [0x160, c, be_801E5160]                 # 0x801E5160
+      - [0x4420, c, be_801E9420]                # 0x801E9420 JP tail, gcc-2.6.3
+      - [0x4AFC, data, data]                    # 0x801E9AFC
+  - [0x4BDC]

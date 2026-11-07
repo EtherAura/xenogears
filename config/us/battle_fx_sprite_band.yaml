@@ -1,0 +1,11 @@
+name: "Battle effect helper 0E/07: band of 16 scrolling actor copies (opcode 0x25)"
+sha1: a46531667c60712bb57fa117c99b4475fc84ca18
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_sprite_band
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+  - [0x784]

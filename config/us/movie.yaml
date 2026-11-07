@@ -1,0 +1,23 @@
+name: Movie overlay (01/12)
+sha1: e7ff2568b918b75e290050597c86584f3499ebdf
+# Four objects: .rodata linker fill and duplicated "\n" strings separate them.
+# gcc-2.6.3, ASPSX < 2.50 (ori), divide checks kept, no $gp.
+segments:
+  - name: movie
+    type: code
+    start: 0x0
+    vram: 0x8006FAF0
+    subsegments:
+      - [0x0, rodata]                           # 0x8006FAF0 a word (the jump tables sit 8-aligned from the next word)
+      - [0x4, .rodata, mv_800704E8]             # 0x8006FAF4
+      - [0x594, .rodata, mv_800737EC]           # 0x80070084
+      - [0x8CA, linkfill]                       # linker fill
+      - [0x8CC, .rodata, mv_80075534]           # 0x800703BC after linker fill
+      - [0x9ED, linkfill]                       # linker fill
+      - [0x9F0, .rodata, mv_8007625C]           # 0x800704E0 after linker fill
+      - [0x9F8, c, mv_800704E8]                 # 0x800704E8 CD check, disc change test
+      - [0x3CFC, c, mv_800737EC]                # 0x800737EC entry point, debug menu
+      - [0x5A44, c, mv_80075534]                # 0x80075534 sector monitor, FAT check
+      - [0x676C, c, mv_8007625C]                # 0x8007625C playback
+      - [0x7358, data, data]                    # 0x80076E48
+  - [0x7453]

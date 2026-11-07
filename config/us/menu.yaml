@@ -1,0 +1,42 @@
+name: Main menu overlay (01/11)
+sha1: fd911d26b921d6eb0c73c3bbc83ea82dc459122f
+# Provisional source files, named by start address until their contents are
+# known. All of it was assembled by ASPSX < 2.50 (`li` is ori) with no divide
+# checks; no $gp; -G0 (4-byte constants sit in .rodata). The dispatcher
+# (func_801C531C) calls 12 submenu entry points; each provisional file starts
+# at one of them. .rodata (jump tables and a few constants) is split so that
+# every file's jump tables stay 8-aligned from its object start. JP's menu
+# differs (37 functions only similar) and is not shared yet.
+segments:
+  - name: menu
+    type: code
+    start: 0x0
+    vram: 0x801C5000
+    subsegments:
+      - [0x0, .rodata, m_801C531C]        # 0x801C5000 dispatcher jump table
+      - [0x28, .rodata, m_801C65F4]       # 0x801C5028
+      - [0xA8, .rodata, m_801C8D78]       # 0x801C50A8 constants shared by 7 functions, then a jump table
+      - [0xFC, .rodata, m_801DBE54]       # 0x801C50FC
+      - [0x15C, .rodata, m_801DE29C]      # 0x801C515C
+      - [0x188, linkfill]               # 0x801C5188 zero word before the next jump table
+      - [0x18C, .rodata, m_801E23CC]      # 0x801C518C
+      - [0x1B4, .rodata, m_801E2BE4]      # 0x801C51B4
+      - [0x1DC, .rodata, m_801E3088]      # 0x801C51DC
+      - [0x278, .rodata, m_801E8018]      # 0x801C5278
+      - [0x31C, c, m_801C531C]            # 0x801C531C
+      - [0x15F4, c, m_801C65F4]           # 0x801C65F4
+      - [0x3D78, c, m_801C8D78]           # 0x801C8D78
+      - [0xCEB0, c, m_801D1EB0]           # 0x801D1EB0
+      - [0xD9A8, c, m_801D29A8]           # 0x801D29A8
+      - [0xE674, c, m_801D3674]           # 0x801D3674
+      - [0x14808, c, m_801D9808]          # 0x801D9808
+      - [0x14F98, c, m_801D9F98]          # 0x801D9F98
+      - [0x16E54, c, m_801DBE54]          # 0x801DBE54
+      - [0x1929C, c, m_801DE29C]          # 0x801DE29C
+      - [0x1BF78, c, m_801E0F78]          # 0x801E0F78
+      - [0x1D3CC, c, m_801E23CC]          # 0x801E23CC
+      - [0x1DBE4, c, m_801E2BE4]          # 0x801E2BE4
+      - [0x1E088, c, m_801E3088]          # 0x801E3088
+      - [0x23018, c, m_801E8018]          # 0x801E8018
+      - [0x246A4, data, data]             # 0x801E96A4
+  - [0x25908]

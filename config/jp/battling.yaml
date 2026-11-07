@@ -1,0 +1,41 @@
+name: Battling overlay (01/0D)
+sha1: a33a01ac132e0e9a9b3de6597a544270943b9d83
+# Same provisional files as US (see config/us/battling.yaml); 449 of 456
+# functions are identical after masking.
+segments:
+  - name: battling
+    type: code
+    start: 0x0
+    vram: 0x8006F180
+    subsegments:
+      - [0x0, rodata]                     # 0x8006F180 a word
+      - [0x4, .rodata, bl_800707A8]       # 0x8006F184
+      - [0xD8, .rodata, bl_800725B0]      # 0x8006F258
+      - [0x108, .rodata, bl_800732CC]     # 0x8006F288
+      - [0x140, .rodata, bl_80075060]     # 0x8006F2C0
+      - [0x2E5, linkfill]                 # 0x8006F465 linker fill
+      - [0x2E8, .rodata, bl_8007B270]     # 0x8006F468
+      - [0x31C, .rodata, bl_8007E528]     # 0x8006F49C
+      - [0x680, .rodata, bl_80083DCC]     # 0x8006F800
+      - [0xB9D, linkfill]                 # 0x8006FD1D linker fill
+      - [0xBA0, .rodata, bl_800891C0]     # 0x8006FD20
+      - [0xBD0, .rodata, bl_8008C7C0]     # 0x8006FD50
+      - [0xC60, c, bl_800707A8]           # 0x8006FDE0
+      - [0x2A68, c, bl_800725B0]          # 0x80071BE8
+      - [0x31D0, asm, bl_80072D18]        # 0x80072350
+      - [0x3784, c, bl_800732CC]          # 0x80072904
+      - [0x5518, c, bl_80075060]          # 0x80074698
+      - [0xB744, c, bl_8007B270]          # 0x8007A8C4
+      - [0xE9FC, c, bl_8007E528]          # 0x8007DB7C
+      - [0x142A0, c, bl_80083DCC]         # 0x80083420
+      - [0x19684, c, bl_800891C0]         # 0x80088804
+      - [0x1BFC4, asm, bl_8008BB00]       # 0x8008B144
+      - [0x1C18C, c, bl_8008BCC8]         # 0x8008B30C
+      - [0x1C86C, asm, bl_8008C3A8]       # 0x8008B9EC
+      - [0x1CC84, c, bl_8008C7C0]         # 0x8008BE04
+      - [0x213FC, data, data]             # 0x8009057C
+      - [0x21654, .data, bl_80075060]     # 0x800907D4
+      - [0x21690, data, data_80090810]    # 0x80090810
+      - [0x217B0, .data, bl_8007E528]     # 0x80090930
+      - [0x21820, data, data_800909A0]    # 0x800909A0
+  - [0x22E12]

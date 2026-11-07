@@ -1,0 +1,6 @@
+// ---- Noah names (naming pass, work/naming) ----
+fxCircleWarp_update = 0x801FC000; // type:func
+fxCircleWarp_draw = 0x801FC064; // type:func
+fxCircleWarp_delete = 0x801FC278; // type:func
+createFxCircleWarp = 0x801FC2C0; // type:func
+battleBssBlock = 0x800C3EB0;

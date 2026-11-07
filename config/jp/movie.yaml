@@ -1,0 +1,22 @@
+name: Movie overlay (01/12)
+sha1: 7a70f1958d5e38d61ec98cdfa5f2733dc92f141a
+# Four objects, as in US (US names).
+segments:
+  - name: movie
+    type: code
+    start: 0x0
+    vram: 0x8006F180
+    subsegments:
+      - [0x0, rodata]                           # 0x8006F180 a word (the jump tables sit 8-aligned from the next word)
+      - [0x4, .rodata, mv_800704E8]             # 0x8006F184
+      - [0x594, .rodata, mv_800737EC]           # 0x8006F714
+      - [0x8CA, linkfill]                       # linker fill
+      - [0x8CC, .rodata, mv_80075534]           # 0x8006FA4C after linker fill
+      - [0x9ED, linkfill]                       # linker fill
+      - [0x9F0, .rodata, mv_8007625C]           # 0x8006FB70 after linker fill
+      - [0x9F8, c, mv_800704E8]                 # 0x8006FB78 CD check, disc change test
+      - [0x3CFC, c, mv_800737EC]                # 0x80072E7C entry point, debug menu
+      - [0x5A44, c, mv_80075534]                # 0x80074BC4 sector monitor, FAT check
+      - [0x676C, c, mv_8007625C]                # 0x800758EC playback
+      - [0x7358, data, data]                    # 0x800764D8
+  - [0x7451]

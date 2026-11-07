@@ -1,0 +1,16 @@
+name: Shop menu (10/09, Noah menu4)
+sha1: 73b05ae7c8ea99a60e24db8ee96dbc5bc441bb4f
+# First pass: text bounds from call targets / prologues and the last jr $ra.
+segments:
+  - name: menu_shop
+    type: code
+    start: 0x0
+    vram: 0x801C5000
+    subsegments:
+      - [0x0, .rodata, sh_801C5040]
+      - [0xD, linkfill]                   # linker fill
+      - [0x10, .rodata, sh_801CC720]
+      - [0x40, c, sh_801C5040]
+      - [0x7720, c, sh_801CC720]
+      - [0xCF50, data, data]
+  - [0xD264]

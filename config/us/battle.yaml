@@ -1,0 +1,64 @@
+name: Battle overlay (01/10)
+sha1: 124703d415f570f9cd8d7dad89c6a4eddfd7e6f0
+# Provisional source files, named by start address until their contents are
+# known. Code before 0x800B1720 was assembled by ASPSX < 2.50 (`li` is ori),
+# code from 0x800B1720 by ASPSX >= 2.50 (addiu), without exception; none of
+# it uses $gp. .rodata is three strings and jump tables: a jump table sits
+# 8-aligned from its object's .rodata start, so a change of address parity
+# between tables, and strings after a table, start a new file. Where such a
+# file starts in .text is not fixed by that: each start is the function
+# boundary in the gap with the fewest calls crossing it. Region A is also cut
+# where JP links blocks of it in another order (0x800728B8, 0x80083FF4,
+# 0x80085350, 0x8008860C, 0x80089B50, 0x8008A274, 0x8008AC88, 0x8009EBA8).
+segments:
+  - name: battle
+    type: code
+    start: 0x0
+    vram: 0x8006FAF0
+    subsegments:
+      - [0x0, rodata]                   # 0x8006FAF0 a word (no code reference found)
+      - [0x4, .rodata, b_800728B8]      # 0x8006FAF4 jump table
+      - [0x18, .rodata, b_800769E8]       # 0x8006FB08 strings, then a jump table
+      - [0x8C, .rodata, b_80079674]       # 0x8006FB7C
+      - [0x520, .rodata, b_80080AE4]      # 0x80070010
+      - [0x720, .rodata, b_80083FF4]    # 0x80070210
+      - [0x760, .rodata, b_80085350]    # 0x80070250
+      - [0x824, .rodata, b_8008B478]      # 0x80070314
+      - [0x880, .rodata, b_800941A4]      # 0x80070370
+      - [0x9DC, .rodata, b_8009E268]      # 0x800704CC
+      - [0xA24, .rodata, b_8009EBA8]    # 0x80070514 jump tables (parity 4)
+      - [0xA78, linkfill]               # 0x80070568 pad to the 8-byte size
+      - [0xA7C, .rodata, b_800A8B0C]    # 0x8007056C jump tables
+      - [0xCEC, .rodata, b_800B15D8]      # 0x800707DC
+      - [0xD60, .rodata, b_800B3E04]      # 0x80070850
+      - [0xF0C, .rodata, b_800B6F0C]      # 0x800709FC
+      - [0xF20, .rodata, b_800B7C28]      # 0x80070A10
+      - [0xFEC, .rodata, b_800BD1FC]      # 0x80070ADC
+      - [0x1018, .rodata, b_800BFC80]     # 0x80070B08
+      - [0x1124, .rodata, b_800C11CC]     # 0x80070C14
+      - [0x133C, c, b_80070E2C]           # 0x80070E2C
+      - [0x2DC8, c, b_800728B8]         # 0x800728B8 JP links it after 0x80089B50/0x8008A274
+      - [0x6EF8, c, b_800769E8]           # 0x800769E8
+      - [0x9B84, c, b_80079674]           # 0x80079674
+      - [0x10FF4, c, b_80080AE4]          # 0x80080AE4
+      - [0x14504, c, b_80083FF4]        # 0x80083FF4 JP: after b_800941A4
+      - [0x15860, c, b_80085350]        # 0x80085350
+      - [0x18B1C, c, b_8008860C]        # 0x8008860C JP: after b_8008AC88
+      - [0x1A060, c, b_80089B50]        # 0x80089B50 JP: after b_80070E2C
+      - [0x1A784, c, b_8008A274]        # 0x8008A274
+      - [0x1B198, c, b_8008AC88]        # 0x8008AC88
+      - [0x1B988, c, b_8008B478]          # 0x8008B478
+      - [0x246B4, c, b_800941A4]          # 0x800941A4
+      - [0x2E778, c, b_8009E268]          # 0x8009E268
+      - [0x2F0B8, c, b_8009EBA8]        # 0x8009EBA8 divide checks
+      - [0x37574, c, b_800A7064]        # 0x800A7064 gear cloth (divide checks)
+      - [0x3901C, c, b_800A8B0C]        # 0x800A8B0C divide checks
+      - [0x41AE8, c, b_800B15D8]          # 0x800B15D8 GCC 2.7.2 CDK, ASPSX >= 2.50 from here
+      - [0x44314, c, b_800B3E04]          # 0x800B3E04
+      - [0x4741C, c, b_800B6F0C]          # 0x800B6F0C
+      - [0x48138, c, b_800B7C28]          # 0x800B7C28
+      - [0x4D70C, c, b_800BD1FC]          # 0x800BD1FC
+      - [0x50190, c, b_800BFC80]          # 0x800BFC80
+      - [0x516DC, c, b_800C11CC]          # 0x800C11CC
+      - [0x52558, data, data]             # 0x800C2048
+  - [0x53F80]

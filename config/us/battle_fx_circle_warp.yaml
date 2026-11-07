@@ -1,0 +1,12 @@
+name: "Battle effect helper 0E/02: circular screen warp (slot 0, never loaded: leftover test)"
+sha1: b19d805888d24b949bab95238083f282a2ee9f84
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_circle_warp
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+      - [0x6F8, data, data]                     # 0x801FC6F8
+  - [0x728]

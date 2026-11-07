@@ -1,0 +1,59 @@
+name: Field overlay (01/0E)
+sha1: 48aa182287c7449ce089954737b43a2039cf0cfd
+# Same files as config/us/field.yaml (shared src/field C), at JP offsets
+# derived with tools/map_versions.py. .rodata has the US layout; code is
+# 0x970 lower at the start and 0xB28 lower by the end (fieldEntryPoint is
+# shorter, OPX_E2 is US-only, and a few functions differ).
+segments:
+  - name: field
+    type: code
+    start: 0x0
+    vram: 0x8006F180
+    subsegments:
+      - [0x0, rodata] # 0x8006F180
+      - [0x4, .rodata, f_8006FDEC] # 0x8006F184
+      - [0x14, .rodata, f_80072140] # 0x8006F194
+      - [0x90, rodata] # 0x8006F210
+      - [0x9C, .rodata, f_80078B5C] # 0x8006F21C
+      - [0x11C, .rodata, f_8008083C] # 0x8006F29C
+      - [0x184, rodata] # 0x8006F304 "ERROR ID0 ACT=%d\n" + stray pad bytes
+      - [0x198, .rodata, f_80086D8C] # 0x8006F318
+      - [0x1B8, .rodata, f_80091944] # 0x8006F338
+      - [0x22C, .rodata, f_800972F4] # 0x8006F3AC
+      - [0x240, .rodata, f_80099AC0] # 0x8006F3C0
+      - [0x254, .rodata, f_800A1730] # 0x8006F3D4
+      - [0x268, .rodata, f_800A19B0] # 0x8006F3E8
+      - [0x2BC, .rodata, f_800A55B8] # 0x8006F43C
+      - [0x2D8, .rodata, f_800A9274] # 0x8006F458 "PARTICLE  "
+      - [0x2E8, .rodata, f_800AA9DC] # 0x8006F468
+      - [0x2FC, c, f_8006FDEC] # 0x8006F47C
+      - [0x1F74, c, f_80071A64] # 0x800710F4
+      - [0x23F8, c, f_80071EE8] # 0x80071578
+      - [0x2650, c, f_80072140] # 0x800717D0
+      - [0x7AD0, c, f_800775C0] # 0x80076C50
+      - [0x8FF0, c, f_80078B5C] # 0x80078170
+      - [0xDDD0, c, f_8007D93C] # 0x8007CF50
+      - [0xE18C, c, f_8007DCF8] # 0x8007D30C
+      - [0x10CD0, c, f_8008083C] # 0x8007FE50
+      - [0x171E0, c, f_80086D8C] # 0x80086360
+      - [0x1FE8C, c, f_8008FA38] # 0x8008F00C
+      - [0x21D98, c, f_80091944] # 0x80090F18
+      - [0x26378, c, f_80095F24] # 0x800954F8
+      - [0x264CC, c, f_80096078] # 0x8009564C
+      - [0x26668, c, f_80096214] # 0x800957E8
+      - [0x26A98, c, f_80096644] # 0x80095C18
+      - [0x26C98, c, f_80096844] # 0x80095E18
+      - [0x27748, c, f_800972F4] # 0x800968C8
+      - [0x29F14, c, f_80099AC0] # 0x80099094
+      - [0x2BF60, c, f_8009BB0C] # 0x8009B0E0
+      - [0x2D380, c, f_8009CF70] # 0x8009C500
+      - [0x2DE2C, c, f_8009DA1C] # 0x8009CFAC
+      - [0x31B40, c, f_800A1730] # 0x800A0CC0
+      - [0x31DC0, c, f_800A19B0] # 0x800A0F40
+      - [0x34B2C, c, f_800A47D4] # 0x800A3CAC
+      - [0x35910, c, f_800A55B8] # 0x800A4A90
+      - [0x395CC, c, f_800A9274] # 0x800A874C
+      - [0x3AD34, c, f_800AA9DC] # 0x800A9EB4
+      - [0x3D17C, c, f_800ACE24] # 0x800AC2FC
+      - [0x3DDC0, data, data] # 0x800ACF40
+  - [0x3F93D]

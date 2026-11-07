@@ -1,0 +1,15 @@
+name: "Battle result screen (10/04, Noah Battle_result: EXP, gold, drops, level-ups)"
+sha1: fddc1755f033567a1ef3a707ee170fb0411d7d8c
+# Provisional source files. ASPSX < 2.50 (ori), no divide checks, no $gp.
+# LIBSND SSINIT_C.OBJ (SsInit) sits between the game files.
+segments:
+  - name: battle_result
+    type: code
+    start: 0x0
+    vram: 0x801DE000
+    subsegments:
+      - [0x0, .rodata, br_801DE5C4]            # 0x801DE000 jump tables
+      - [0x48, c, br_801DE048]                 # 0x801DE048
+      - [0x5C4, c, br_801DE5C4]                # 0x801DE5C4
+      - [0x64C0, data, data]                    # 0x801E44C0
+  - [0x6500]

@@ -1,0 +1,13 @@
+name: "Battle effect helper 0E/07: band of 16 scrolling actor copies (opcode 0x25)"
+sha1: 1a29ae0b6f9675b75d7a6f70428c91c68a28c1a4
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_sprite_band
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, .rodata, fx_801FC000]            # 0x801FC000 JP's zeroed SVECTOR v[4] initialiser
+      - [0x20, c, fx_801FC000]                 # 0x801FC020
+  - [0x840]

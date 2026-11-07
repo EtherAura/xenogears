@@ -1,0 +1,13 @@
+name: "Battle effect helper 0E/05: a 3D model shattering into polygons (opcode 0x1D)"
+sha1: 85a658bfa6591957e3d8b45e50dfda9099b2fe46
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_model_shatter
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, .rodata, fx_801FC074]            # 0x801FC000
+      - [0x74, c, fx_801FC074]                 # 0x801FC074
+      - [0xE14, data, data]                     # 0x801FCE14
+  - [0xE1C]

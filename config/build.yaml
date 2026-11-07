@@ -1,0 +1,306 @@
+# How C files are compiled. Every C file goes through
+#   cpp (host) -> cc1 (PSX GCC) -> maspsx (PSY-Q assembler emulation) -> GNU as.
+# A file uses the first preset whose `paths` entry is a prefix of its path
+# (relative to src/); anything else uses `default`. Presets only list the
+# settings they change.
+
+default:
+  cc: gcc-2.7.2-psx
+  cflags: >-
+    -O2 -G8 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+    -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+    -quiet
+  maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+
+presets:
+  # JP builds the files that are GCC 2.7.2 CDK in US with GCC 2.6.3 and
+  # ASPSX 2.34 (as in main).
+  - version: jp
+    paths: [battle_fx_circle_warp/, battle_fx_sprite_wobble/, battle_fx_model_shatter/, battle_fx_tiled_sprite/, battle_fx_sprite_band/, battle_fx_screen_ripple/,
+            battle_loader/bld_801E62E0.c, battle_loader/bld_801E7F4C.c, battle_loader/bld_801E91E8.c,
+            battle_debug/bd_80280844.c, battle/b_800B15D8.c, battle/b_800B3E04.c,
+            battle/b_800B6F0C.c, battle/b_800B7C28.c, battle/b_800BD1FC.c,
+            battle/b_800BFC80.c, battle/b_800C11CC.c]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Field overlay: GCC 2.7.2 (PSY-Q), -G0 (an 8-byte extern RECT is
+  # addressed as small data under -G8), ASPSX < 2.50 (`li` is ori); it never
+  # uses $gp.
+  - paths: [field/]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Battle overlay, provisional. Region A (to 0x800B15D8) is GCC 2.6.3 with
+  # ASPSX < 2.50 (`li` is ori); only b_8009E268 keeps the divide checks
+  # (every divide from 0x8009F1C4 to 0x800B10EC has them, none before), which
+  # confirms that file's start. Region B (from 0x800B15D8) is GCC 2.7.2 CDK
+  # (like main's sprite code) with ASPSX >= 2.50 (addiu) and no divide
+  # checks. -G0 (the 2-byte string " " sits in .rodata); no $gp.
+  - paths: [battle/b_800B15D8.c, battle/b_800B3E04.c, battle/b_800B6F0C.c, battle/b_800B7C28.c,
+            battle/b_800BD1FC.c, battle/b_800BFC80.c, battle/b_800C11CC.c]
+    cc: gcc-2.7.2-cdk
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+  - paths: [battle/b_8009E268.c, battle/b_8009EBA8.c, battle/b_800A7064.c, battle/b_800A8B0C.c]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  - paths: [battle/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # World map overlay, provisional: ASPSX >= 2.50 (addiu) except the last
+  # file (ASPSX < 2.50, ori); every divide keeps its checks; -G0 (a 4-byte
+  # constant sits in .rodata); no $gp. Compiler not yet confirmed.
+  - paths: [worldmap/w_8009980C.c]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  - paths: [worldmap/]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section --expand-div
+  # Battling overlay: GCC 2.7.2 (2.6.3/2.6.0 and CDK fail), ASPSX < 2.50
+  # (ori), no divide checks, -G0, no $gp.
+  - paths: [battling/]
+    cc: gcc-2.7.2-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Round 20 modules, provisional (compilers not yet confirmed; no $gp, -G0).
+  # PSY-Q 4.0 library objects linked into overlays: as main/psyq/.
+  - paths: [video_player/psyq/, battle_result/psyq/]
+    cflags: >-
+      -O3 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section --expand-div
+  # The STR player: GCC 2.6.3 (2.7.2 and 2.6.0 fail some), divide checks.
+  - paths: [video_player/vp_]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  # Battle debugger tools: GCC 2.7.2 CDK only, ASPSX 2.56.
+  - paths: [battle_debug/bd_80280844.c]
+    cc: gcc-2.7.2-cdk
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+  # Movie overlay: GCC 2.6.3, ASPSX 2.34, divide checks kept; the sector
+  # monitor / FAT check file was built with -fno-strength-reduce.
+  - paths: [movie/mv_80075534.c]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -fno-strength-reduce -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole
+      -ffunction-cse -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas
+      -fgnu-linker -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  - paths: [movie/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  # Battle effect overlays battle_fx_*: GCC 2.7.2 CDK (psx does not split the
+  # 0x8000-offset addresses), ASPSX 2.56.
+  - paths: [battle_fx_circle_warp/, battle_fx_sprite_wobble/, battle_fx_model_shatter/, battle_fx_tiled_sprite/, battle_fx_sprite_band/, battle_fx_screen_ripple/]
+    cc: gcc-2.7.2-cdk
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+  # battle_event: the US tail is GCC 2.7.2 CDK with ASPSX 2.56; the event
+  # interpreter and JP's tail are GCC 2.6.3 with ASPSX 2.34.
+  - paths: [battle_event/be_801E93E8.c]
+    cc: gcc-2.7.2-cdk
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+  - paths: [battle_event/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Battle loader: sprites and transitions are GCC 2.7.2 CDK with ASPSX 2.56,
+  # the loader phases GCC 2.6.3 (the environment file falls to the default).
+  - paths: [battle_loader/bld_801E62E0.c, battle_loader/bld_801E7F4C.c, battle_loader/bld_801E91E8.c]
+    cc: gcc-2.7.2-cdk
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section
+  # ASPSX < 2.50 (ori), no divide checks.
+  # Battle result overlay: GCC 2.6.3 (2.6.0 and 2.7.2 fail some).
+  - paths: [battle_result/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Battle debug selector: GCC 2.6.3 (2.7.2 fails two of three).
+  - paths: [battle_debug_selector/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # battle_loader: the compiler changes 2.6.3 (0x801E4048) -> CDK (0x801E62E0) ->
+  # 2.6.3 (0x801E70E8) -> CDK (0x801E7F4C), confirming those file starts.
+  - paths: [battle_loader/bld_801E4048.c, battle_loader/bld_801E70E8.c]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  - paths: [battle_loader/, field_debug/, battle_debug/]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Shop, gear shop, party and menu_name_entry overlays: built from the main menu's
+  # library; ASPSX < 2.50 (ori), no divide checks, -G0, no $gp. Compiler
+  # assumed from the main menu (GCC 2.6.3), not yet confirmed.
+  - paths: [menu_gear_shop/, menu_shop/, menu_name_entry/, menu_party/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Main menu overlay: GCC 2.6.3, ASPSX < 2.50 (ori), no divide checks,
+  # -G0 (4-byte constants in .rodata), no $gp.
+  - paths: [menu/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section
+  # Gear model/render overlay: GCC 2.6.3 (2.7.2 fails about a fifth of it),
+  # ASPSX < 2.50 (`li` is ori), no $gp, and the divide checks are kept
+  # (--expand-div).
+  - paths: [field_mecha/]
+    cc: gcc-2.6.3-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div
+  # JP (released first) built the task/sprite/font code with GCC 2.6.3 and
+  # ASPSX < 2.50; US rebuilt it with the CDK compiler and a newer ASPSX.
+  # 2.6.0 matches all but two functions: JP reads a spilled word's low half
+  # straight from its stack slot (lhu), which 2.6.0 does as lw + move.
+  - version: jp
+    paths: [main/task.c, main/sprite.c, main/sprite_actor.c, main/sprite_bytecode.c,
+            main/shape_transfer.c, main/font.c]
+    cc: gcc-2.6.3-psx
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  # Kernel code up to 0x8001C76C was assembled by an older ASPSX (< 2.50:
+  # `li` becomes ori); 2.30-2.46 all match. 0x8001B970+ needs GCC 2.6.0.
+  # kernel.c and pad.c: cc1 -G0 (short strings in .rodata, no $gp in the
+  # code) but ASPSX -G8: their small statics sit in .sbss.
+  #
+  # Every main preset uses --one-pass-gp (ASPSX only reaches a symbol through
+  # $gp after its definition, and cc1 -G0 emits statics after the code), and
+  # the ASPSX 2.34 ones --lcomm-word-align (a 4-byte slot per static). See
+  # tools/patches/maspsx-one-pass-gp.patch.
+  - paths: [main/kernel.c, main/pad.c]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    asG: 8
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  # model.c, dialog.c and debug_font.c: like kernel.c, cc1 -G0 and ASPSX -G8
+  # (they own .data words, and their small statics sit in .sbss).
+  - paths: [main/model.c, main/dialog.c, main/debug_font.c]
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    asG: 8
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  - paths: [main/battle_boot.c, main/heap.c, main/heap_debug.c, main/background.c,
+            main/mime.c, main/light.c, main/printf.c]
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  - paths: [main/game_init.c]
+    cc: gcc-2.6.0-psx
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  # The file system (0x80027D40-0x8002C3E8) is GCC 2.6.0 with -G0 (its short
+  # strings sit in .rodata), and retail keeps the div-by-zero/overflow break
+  # checks, which maspsx adds with --expand-div.
+  - paths: [main/filesystem.c, main/background_render.c]
+    cc: gcc-2.6.0-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --expand-div --one-pass-gp --lcomm-word-align
+  # The battle environment loader and the sound driver (0x800379D8-
+  # 0x8003F738): GCC 2.6.0 (2.6.3 fails audioTick, 2.7.2 fails functions in
+  # sequencer.c).
+  # The sound driver's tables (data only, src/main/sound_data.c): cc1 -G0,
+  # since the 4-byte SPU base pointer D_800508E4 sits in .data.
+  - paths: [main/sound_data.c]
+    cc: gcc-2.6.0-psx
+    cflags: >-
+      -O2 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  - paths: [main/battle_env.c, main/sound.c, main/sequencer.c]
+    cc: gcc-2.6.0-psx
+    maspsx: --aspsx-version=2.34 --macro-inc --use-comm-section --one-pass-gp --lcomm-word-align
+  # PSY-Q 4.0 library objects (src/main/psyq/<lib>/<obj>.c): GCC 2.7.2
+  # (PSY-Q), -G0 (short strings in .rodata), ASPSX 2.56, and the divide
+  # checks (--expand-div).
+  - paths: [main/psyq/]
+    cflags: >-
+      -O3 -G0 -mips1 -mcpu=3000 -w -funsigned-char -fpeephole -ffunction-cse
+      -fpcc-struct-return -fcommon -fverbose-asm -msoft-float -mgas -fgnu-linker
+      -quiet
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section --expand-div --one-pass-gp
+  # Task lists and sprite actors were built with the CDK variant of GCC
+  # 2.7.2: it keeps separate lb/lbu loads of one field that PSY-Q's 2.7.2
+  # merges.
+  - paths: [main/task.c, main/sprite.c, main/sprite_actor.c, main/sprite_bytecode.c,
+            main/shape_transfer.c, main/font.c]
+    cc: gcc-2.7.2-cdk
+    maspsx: --aspsx-version=2.56 --macro-inc --use-comm-section --one-pass-gp

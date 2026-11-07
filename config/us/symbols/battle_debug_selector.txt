@@ -1,0 +1,18 @@
+// ---- Noah names (naming pass, work/naming) ----
+battleHandleInput = 0x80089CCC;
+openMusicBattleFolder = 0x8008AB70;
+battleRenderStructs = 0x800C4A20;
+pCurrentBattleRenderStruct = 0x800CCB00;
+battleInputButton = 0x800D3014;
+battleDebugSelector = 0x801E0A34; // type:func
+battleDebugSelectorLines = 0x801E1D40;
+battleDebugSelectorCharacterNames = 0x801E1D50;
+battleDebugSelectorGearMapping = 0x801E1D80;
+battleDebugSelectorOmniGearMapping = 0x801E1D90;
+battleDebugSelectorTableValues = 0x801E1DA0;
+battleDebugSelectorIsCellEnabled = 0x801E1DD0;
+battleDebugSelectorInit = 0x801E0124; // type:func
+battleDebugSelectorMainLoop = 0x801E0238; // type:func
+allocateBattleHeap = 0x8008ABB8;
+battleSetDebugInventory = 0x8009B1E4;
+battleDebugSelectorMusicBuffer = 0x800D39D8;

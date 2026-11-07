@@ -1,0 +1,23 @@
+name: "Battle loader (0C/04, Noah battleLoader/battleSpriteLoader, battle start effects)"
+sha1: 1e0a331245ad46c3bde1a70ad144771c4bd5c26a
+# The battle loader (Noah battleLoader.cpp, battleSpriteLoader.cpp). Files
+# follow the compiler and assembler changes: loader phases (gcc-2.6.3, ori),
+# sprites (cdk, addiu), environment (gcc-2.7.2, ori), transitions (cdk,
+# addiu); the jump table at 0x801E4034 changes parity, so func_801E91E8 starts
+# another object. US only for now (JP: 21 of 51 functions identical).
+segments:
+  - name: battle_loader
+    type: code
+    start: 0x0
+    vram: 0x801E4000
+    subsegments:
+      - [0x0, .rodata, bld_801E70E8]            # 0x801E4000 jump table (func_801E7210)
+      - [0x20, .rodata, bld_801E7F4C]           # 0x801E4020 jump table (func_801E8588)
+      - [0x34, .rodata, bld_801E91E8]           # 0x801E4034 jump table (parity 4)
+      - [0x48, c, bld_801E4048]                 # 0x801E4048 gcc-2.6.3, ASPSX 2.34
+      - [0x22E0, c, bld_801E62E0]               # 0x801E62E0 gcc-2.7.2-cdk, ASPSX 2.56
+      - [0x30E8, c, bld_801E70E8]               # 0x801E70E8 gcc-2.7.2, ASPSX 2.34
+      - [0x3F4C, c, bld_801E7F4C]               # 0x801E7F4C gcc-2.7.2-cdk, ASPSX 2.56
+      - [0x51E8, c, bld_801E91E8]               # 0x801E91E8 gcc-2.7.2-cdk, ASPSX 2.56
+      - [0x55BC, data, data]                    # 0x801E95BC
+  - [0x56C0]

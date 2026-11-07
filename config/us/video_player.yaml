@@ -1,0 +1,34 @@
+name: STR video player library (18/01)
+sha1: 138835efbceb6bbd2010f0d63c740a6cfdebd261
+# Game code (the STR player: gcc-2.6.3, ASPSX < 2.50, divide checks) then PSY-Q 4.0 LIBPRESS and LIBCD
+# objects (exact bounds from tools/psyq_sigs.py). func_801D5D34 is not in the
+# signature set: probably LIBCD C_010.OBJ (between C_009 and C_011).
+segments:
+  - name: video_player
+    type: code
+    start: 0x0
+    vram: 0x801D3000
+    subsegments:
+      - [0x0, .rodata, psyq/libpress/libpress]  # 0x801D3000 LIBPRESS strings
+      - [0xA9, linkfill]                        # 0x801D30A9 linker fill
+      - [0xAC, .rodata, psyq/libcd/c_011]       # 0x801D30AC
+      - [0xC1, linkfill]                        # 0x801D30C1 linker fill
+      - [0xC4, c, vp_801D30C4]                  # 0x801D30C4 the STR player
+      - [0x144C, c, psyq/libpress/build]        # 0x801D444C LIBPRESS BUILD.OBJ
+      - [0x1534, c, psyq/libpress/libpress]     # 0x801D4534 LIBPRESS.OBJ
+      - [0x1C94, c, psyq/libpress/vlc]          # 0x801D4C94 VLC.OBJ
+      - [0x202C, c, psyq/libpress/vlc_c]        # 0x801D502C VLC_C.OBJ
+      - [0x23C0, c, psyq/libpress/encspu]       # 0x801D53C0 ENCSPU.OBJ
+      - [0x283C, c, psyq/libcd/cdrom]           # 0x801D583C LIBCD CDROM.OBJ
+      - [0x286C, c, psyq/libcd/cdread2]         # 0x801D586C CDREAD2.OBJ
+      - [0x2920, c, psyq/libcd/c_002]           # 0x801D5920 C_002.OBJ
+      - [0x2980, c, psyq/libcd/c_003]           # 0x801D5980 C_003.OBJ
+      - [0x2A04, c, psyq/libcd/c_004]           # 0x801D5A04 C_004.OBJ
+      - [0x2AF4, c, psyq/libcd/c_005]           # 0x801D5AF4 C_005.OBJ
+      - [0x2B7C, c, psyq/libcd/c_007]           # 0x801D5B7C C_007.OBJ
+      - [0x2C34, c, psyq/libcd/c_008]           # 0x801D5C34 C_008.OBJ
+      - [0x2C70, c, psyq/libcd/c_009]           # 0x801D5C70 C_009.OBJ
+      - [0x2D34, c, psyq/libcd/c_010]           # 0x801D5D34 unidentified (C_010.OBJ?)
+      - [0x2D54, c, psyq/libcd/c_011]           # 0x801D5D54 C_011.OBJ
+      - [0x38B4, data, data]                    # 0x801D68B4
+  - [0x15A1C]

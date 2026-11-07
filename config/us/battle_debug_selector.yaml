@@ -1,0 +1,13 @@
+name: "Battle debug selector (12/01, Noah battleDebugSelector; battles started without a field request)"
+sha1: 7a709f736bfe7af6fd63147d3ec9cbae4e37851d
+# One provisional file: ASPSX < 2.50 (ori), no $gp.
+segments:
+  - name: battle_debug_selector
+    type: code
+    start: 0x0
+    vram: 0x801E0000
+    subsegments:
+      - [0x0, .rodata, bds_801E0124]            # 0x801E0000
+      - [0x124, c, bds_801E0124]                # 0x801E0124
+      - [0xD40, data, data]                     # 0x801E0D40
+  - [0x1DDC]

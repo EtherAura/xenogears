@@ -1,0 +1,12 @@
+name: "Battle effect helper 0E/04: cosine row wobble of an actor (opcode 0x19)"
+sha1: 3d64d8b6857ab8dfc363d0fd74c08831e81f42f0
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_sprite_wobble
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+  - [0x5E0]

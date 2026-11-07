@@ -1,0 +1,57 @@
+name: Battle overlay (01/10)
+sha1: 0b50a4c474f8184e19cb4de4e857de1fb887306b
+# Same files as US (US names in the symbol file), in JP's link order: JP
+# places several region A objects elsewhere. JP-only differences under
+# #if VERSION_JP or as JP assembly.
+segments:
+  - name: battle
+    type: code
+    start: 0x0
+    vram: 0x8006F180
+    subsegments:
+      - [0x0, rodata]                           # 0x8006F180
+      - [0x4, .rodata, b_800728B8]              # 0x8006F184
+      - [0x18, .rodata, b_800769E8]             # 0x8006F198
+      - [0x8C, .rodata, b_80079674]             # 0x8006F20C
+      - [0x520, .rodata, b_80080AE4]            # 0x8006F6A0
+      - [0x720, .rodata, b_80085350]            # 0x8006F8A0
+      - [0x7E4, .rodata, b_8008B478]            # 0x8006F964
+      - [0x840, .rodata, b_800941A4]            # 0x8006F9C0
+      - [0x99C, .rodata, b_8009E268]            # 0x8006FB1C
+      - [0x9E4, .rodata, b_80083FF4]            # 0x8006FB64
+      - [0xA24, .rodata, b_8009EBA8]            # 0x8006FBA4
+      - [0xA78, linkfill]                       # 0x8006FBF8
+      - [0xA7C, .rodata, b_800A8B0C]            # 0x8006FBFC
+      - [0xCEC, .rodata, b_800B15D8]            # 0x8006FE6C
+      - [0xD60, .rodata, b_800B3E04]            # 0x8006FEE0
+      - [0xF0C, .rodata, b_800B6F0C]            # 0x8007008C
+      - [0xF20, .rodata, b_800B7C28]            # 0x800700A0
+      - [0xFFC, .rodata, b_800BD1FC]            # 0x8007017C
+      - [0x1028, .rodata, b_800BFC80]           # 0x800701A8
+      - [0x1134, .rodata, b_800C11CC]           # 0x800702B4
+      - [0x134C, c, b_80070E2C]                 # 0x800704CC
+      - [0x2DD8, c, b_80089B50]                 # 0x80071F58
+      - [0x349C, c, b_8008A274]                 # 0x8007261C
+      - [0x3DAC, c, b_800728B8]                 # 0x80072F2C
+      - [0x7EDC, c, b_800769E8]                 # 0x8007705C
+      - [0xAB68, c, b_80079674]                 # 0x80079CE8
+      - [0x11FD8, c, b_80080AE4]                # 0x80081158
+      - [0x154E8, c, b_80085350]                # 0x80084668
+      - [0x18774, c, b_8008AC88]                # 0x800878F4
+      - [0x18F64, c, b_8008B478]                # 0x800880E4
+      - [0x21C3C, c, b_8008860C]                # 0x80090DBC
+      - [0x23180, c, b_800941A4]                # 0x80092300
+      - [0x2D1B0, c, b_8009E268]                # 0x8009C330
+      - [0x2DAF0, c, b_80083FF4]                # 0x8009CC70
+      - [0x2EE4C, c, b_8009EBA8]                # 0x8009DFCC
+      - [0x37308, c, b_800A7064]                # 0x800A6488
+      - [0x38DB0, c, b_800A8B0C]                # 0x800A7F30
+      - [0x4187C, c, b_800B15D8]                # 0x800B09FC
+      - [0x4414C, c, b_800B3E04]                # 0x800B32CC
+      - [0x472CC, c, b_800B6F0C]                # 0x800B644C
+      - [0x48010, c, b_800B7C28]                # 0x800B7190
+      - [0x4D754, c, b_800BD1FC]                # 0x800BC8D4
+      - [0x502D8, c, b_800BFC80]                # 0x800BF458
+      - [0x51770, c, b_800C11CC]                # 0x800C08F0
+      - [0x52600, data, data]                   # 0x800C1780
+  - [0x5402E]

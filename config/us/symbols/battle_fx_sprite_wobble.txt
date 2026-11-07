@@ -1,0 +1,4 @@
+// ---- Noah names (naming pass, work/naming) ----
+fxSpriteWobble_update = 0x801FC000; // type:func (the update callback, code not rodata)
+fxSpriteWobble_draw = 0x801FC020; // type:func
+createFxSpriteWobble = 0x801FC53C; // type:func

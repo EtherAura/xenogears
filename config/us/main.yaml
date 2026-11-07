@@ -1,0 +1,248 @@
+name: Main executable (SLUS_006.64)
+sha1: 560bbdbeb9264c935294ecad5a3d4ab230a006a9
+# The PS-X EXE loads 0x49800 bytes at 0x80010000. Entry (0x80019524) sets
+# $gp = 0x80059170 and clears BSS from 0x800592BC to 0x8006FAF0. The file's
+# last 0x544 bytes are zero sector padding over the start of BSS; the build
+# restores them (tools/pad_image.py pads to the retail file size).
+segments:
+  - [0x0, header, header]
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    bss_size: 0x16834
+    subsegments:
+      # Read-only data, in the same file order as the code.
+      - [0x800, rodata, boot_header]  # 0x80010000 runningOnDTL, file/dir tables, boot mode table (not kernel.c's: non-const)
+      - [0x88FC, .rodata, kernel]     # 0x800180FC
+      - [0x8B3C, .rodata, game_init]    # 0x8001833C
+      - [0x8BD8, .rodata, sprite]       # 0x800183D8
+      - [0x8E44, .rodata, sprite_actor] # 0x80018644
+      - [0x8EE0, .rodata, sprite_bytecode]  # 0x800186E0
+      - [0x90CC, .rodata, font]         # 0x800188CC
+      - [0x90EC, .rodata, filesystem]   # 0x800188EC
+      - [0x9180, .rodata, model]        # 0x80018980
+      - [0x9198, .rodata, heap]         # 0x80018998 strings of heap.c's name tables
+      - [0x927C, .rodata, dialog]       # 0x80018A7C
+      - [0x92BC, .rodata, pad]          # 0x80018ABC
+      - [0x9330, .rodata, printf]       # 0x80018B30 new 8-aligned object: vprintf's strings and jump table
+      - [0x93DC, .rodata, sequencer]    # 0x80018BDC new object: the SPU transfer queue's jump table only
+      - [0x93F0, .rodata, psyq/libc/sprintf] # 0x80018BF0
+      - [0x94CC, .rodata, psyq/libcd/event] # 0x80018CCC
+      - [0x94E4, .rodata, psyq/libcd/sys] # 0x80018CE4
+      - [0x94EC, .rodata, psyq/libcd/bios] # 0x80018CEC
+      - [0x973C, .rodata, psyq/libc2/puts] # 0x80018F3C
+      - [0x9744, .rodata, psyq/libcd/cdread] # 0x80018F44
+      - [0x9788, .rodata, psyq/libgpu/prim] # 0x80018F88
+      - [0x9858, .rodata, psyq/libgpu/sys] # 0x80019058 "$Id: sys.c ..." first
+      - [0x9A8C, .rodata, psyq/libgpu/tmd]  # 0x8001928C
+      - [0x9BC4, .rodata, psyq/libetc/vsync] # 0x800193C4
+      - [0x9BD4, .rodata, psyq/libetc/intr] # 0x800193D4 "$Id: intr.c ..." first
+      - [0x9C40, .rodata, psyq/libetc/intr_dma] # 0x80019440
+      - [0x9C6C, .rodata, psyq/libspu/spu] # 0x8001946C
+      - [0x9CB4, .rodata, psyq/libspu/s_si] # 0x800194B4
+      - [0x9CE4, .rodata, psyq/libspu/s_sca] # 0x800194E4
+      - [0x9D24, asm]            # 0x80019524: entry point (hand-written startup)
+      # Provisional source files, bounded by compiler/assembler changes found
+      # while matching (see config/build.yaml); true boundaries may differ.
+      - [0x9D78, c, kernel]      # 0x80019578 main(), boot, kernel menu, party file loading
+      - [0xBEC4, c, battle_boot] # 0x8001B6C4 battle entry, battle graphics init
+      - [0xC170, c, game_init]   # 0x8001B970 game state, battle loader, debug menu
+      - [0xCF6C, asm]            # 0x8001C76C 0x170-byte table inside .text
+      - [0xD0DC, c, task]        # 0x8001C8DC task lists
+      - [0xDA98, c, sprite]      # 0x8001D298 sprite actors (Noah: fieldGraphicObject)
+      # The assembler 8-aligns jump tables relative to each object's .rodata,
+      # and -mgpopt puts initializer constants ahead of them; retail's layout
+      # of 0x800183D8-0x800188CC fits only with file breaks here and below.
+      - [0x122D8, c, sprite_actor]    # 0x80021AD8 vector/animation-stack helpers, sprite actor state
+      - [0x150D4, c, sprite_bytecode] # 0x800248D4 executeSpriteBytecode2
+      - [0x15720, c, shape_transfer]  # 0x80024F20 VRAM shape-transfer queue, draw callbacks
+      # font.c reaches D_80059534/D_80059580 via %hi/%lo; shape_transfer.c
+      # defines them ($gp), so they are different files.
+      - [0x167A8, c, font]       # 0x80025FA8 font glyph drawing (Noah: sFont)
+      # ASPSX < 2.50 again from here. createBackgroundPoly is GCC 2.7.2 (PSY-Q),
+      # the render/compute pair after it GCC 2.6.0.
+      - [0x1789C, c, background] # 0x8002709C createBackgroundPoly (Noah: field.cpp sBackgroundPoly)
+      - [0x17BC4, c, background_render]  # 0x800273C4 render/compute background polys
+      - [0x18540, c, filesystem] # 0x80027D40 CD file system and streaming, VRAM scroll helpers (GCC 2.6.0)
+      # model.c's jump table must start its object's .rodata (8-aligned) right
+      # after the CD streaming code's strings, so the file starts here.
+      - [0x1CBE8, c, model]      # 0x8002C3E8 3D models: relocation, prim setup (Noah: 3dModel)
+      - [0x1E810, asm]           # 0x8002E010 hand-written GTE render loops (Noah genericTrianglePrim_*, prim*_*)
+      - [0x2094C, c, mime]       # 0x8003014C MIMe vertex morphing (Noah modelDynamicVertices)
+      - [0x20F50, asm]           # 0x80030750 hand-written (self-patched render code and its patcher)
+      - [0x21230, c, light]      # 0x80030A30 light matrices, back colour, triangle/box clipping
+      - [0x21DA0, asm]           # 0x800315A0 hand-written: 21 add-to-OT stubs
+      - [0x22094, c, heap]       # 0x80031894 heap / memory manager (allocateHeap, freeHeap, MCB dump)
+      # heap_debug.c reaches D_800592B8 via %hi/%lo; heap.c defines it ($gp).
+      - [0x235CC, c, heap_debug] # 0x80032DCC heap dump to a PC file
+      - [0x23688, asm]           # 0x80032E88 hand-written: mallocAndDecompress falls into the LZSS decoder
+      - [0x23754, c, dialog]     # 0x80032F54 dialog text windows, font, text printer
+      - [0x25E9C, c, pad]        # 0x8003569C controller input, replay, vibration, PC screen dumps (-G0)
+      - [0x26EE0, c, printf]     # 0x800366E0 print hook and vprintf core
+      - [0x274D8, c, debug_font] # 0x80036CD8 on-screen debug text (Noah debugFont), GCC 2.7.2 (PSY-Q)
+      - [0x281B4, asm]           # 0x800379B4 hand-written (la with an empty delay slot, tail call)
+      - [0x281D8, c, battle_env] # 0x800379D8 loadBattleMechaAndEnvironment (GCC 2.6.0)
+      # The sound driver (GCC 2.6.0, -G8): two files, see sound.c's header.
+      - [0x28388, c, sound]      # 0x80037B88 init, WDS/sequence lists, reverb, sound arena, SPU RAM blocks, instances
+      - [0x2AAD4, c, sequencer]  # 0x8003A2D4 effect/music controls, SPU transfer queue, audio tick, opcodes, voices
+      - [0x2FF38, asm]           # 0x8003F738 hand-written (sin/cos table readers), then the PSY-Q SDK
+      - [0x300E8, c, psyq/libc2/bzero]   # 0x8003F8E8
+      - [0x30118, c, psyq/libc2/memchr]  # 0x8003F918
+      - [0x30168, c, psyq/libc2/memcpy]  # 0x8003F968
+      - [0x3019C, c, psyq/libc2/memmove] # 0x8003F99C
+      - [0x30208, c, psyq/libc2/memset]  # 0x8003FA08
+      - [0x30238, c, psyq/libc2/rand]    # 0x8003FA38
+      - [0x30278, c, psyq/libc2/strcat]  # 0x8003FA78
+      - [0x30320, c, psyq/libc2/strcmp]  # 0x8003FB20
+      - [0x30384, c, psyq/libc2/strcpy]  # 0x8003FB84
+      - [0x303C8, c, psyq/libc2/strlen]  # 0x8003FBC8
+      - [0x303F8, c, psyq/libc/sprintf]  # 0x8003FBF8
+      - [0x30C54, asm]                   # 0x80040454
+      - [0x30DF4, c, psyq/libapi/counter] # 0x800405F4
+      - [0x30F6C, c, psyq/libapi/pad]    # 0x8004076C
+      - [0x3128C, asm]                   # 0x80040A8C
+      - [0x3143C, c, psyq/libapi/send]  # 0x80040C3C
+      - [0x3145C, asm]                   # 0x80040C5C
+      - [0x314BC, c, psyq/libds/dscb]    # 0x80040CBC
+      - [0x31508, c, psyq/libcd/event]   # 0x80040D08
+      - [0x31618, asm]                   # 0x80040E18
+      - [0x31628, c, psyq/libcd/sys]     # 0x80040E28
+      - [0x31DB4, c, psyq/libcd/bios]    # 0x800415B4
+      - [0x3358C, c, psyq/libc2/puts]    # 0x80042D8C
+      - [0x335DC, c, psyq/libc2/putchar] # 0x80042DDC
+      - [0x33690, c, psyq/libc2/ctype]   # 0x80042E90
+      - [0x336F0, c, psyq/libcd/cdread]  # 0x80042EF0
+      - [0x33F6C, c, psyq/libgpu/ext]    # 0x8004376C
+      - [0x3421C, c, psyq/libgpu/prim]   # 0x80043A1C
+      - [0x34910, c, psyq/libgpu/sys]    # 0x80044110
+      - [0x379A4, asm]                   # 0x800471A4
+      - [0x379B4, c, psyq/libgpu/tmd]    # 0x800471B4 LIBGPU TMD.OBJ (C)
+      - [0x392B0, c, psyq/libgte/fog_02]  # 0x80048AB0 LIBGTE FOG_02.OBJ: SetFogNearFar (C)
+      - [0x393BC, asm]                     # 0x80048BBC LIBGTE (hand-written assembly)
+      - [0x3BB2C, c, psyq/libgte/ratan]   # 0x8004B32C LIBGTE RATAN.OBJ: ratan2 (C)
+      - [0x3BCAC, asm]                     # 0x8004B4AC PATCHGTE, LIBETC, ... 
+      - [0x3BD4C, c, psyq/libetc/vsync]  # 0x8004B54C
+      - [0x3BF30, asm]                   # 0x8004B730
+      - [0x3BF40, c, psyq/libetc/intr]   # 0x8004B740
+      - [0x3C650, asm]                   # 0x8004BE50
+      - [0x3C720, c, psyq/libetc/intr_vb] # 0x8004BF20
+      - [0x3C848, c, psyq/libetc/intr_dma] # 0x8004C048
+      - [0x3CAF0, c, psyq/libetc/vmode]  # 0x8004C2F0
+      - [0x3CB18, asm]                   # 0x8004C318
+      - [0x3CB98, c, psyq/libsn/pcread]  # 0x8004C398
+      - [0x3CC58, asm]                   # 0x8004C458
+      - [0x3CC70, c, psyq/libsn/pcwrite] # 0x8004C470
+      - [0x3CD30, asm]                   # 0x8004C530
+      - [0x3CD48, c, psyq/libspu/s_i]    # 0x8004C548
+      - [0x3CD68, c, psyq/libspu/s_ini]  # 0x8004C568
+      - [0x3CEDC, c, psyq/libspu/spu]    # 0x8004C6DC
+      - [0x3DA70, c, psyq/libspu/s_dcb]  # 0x8004D270
+      - [0x3DA94, c, psyq/libspu/s_q]    # 0x8004D294
+      - [0x3DB10, c, psyq/libspu/s_m_init] # 0x8004D310
+      - [0x3DB64, c, psyq/libspu/s_snc]  # 0x8004D364
+      - [0x3DBB4, c, psyq/libspu/s_sr]   # 0x8004D3B4
+      - [0x3DC84, c, psyq/libspu/s_m_util] # 0x8004D484
+      - [0x3DD90, c, psyq/libspu/s_rdd]  # 0x8004D590
+      - [0x3DE00, c, psyq/libspu/s_si]   # 0x8004D600
+      - [0x3DF40, c, psyq/libspu/s_sic]  # 0x8004D740
+      - [0x3DF84, c, psyq/libspu/s_cb]   # 0x8004D784
+      - [0x3DFA8, c, psyq/libspu/s_gvea] # 0x8004D7A8
+      - [0x3E018, c, psyq/libspu/s_r]    # 0x8004D818
+      - [0x3E078, c, psyq/libspu/s_w]    # 0x8004D878
+      - [0x3E0D8, c, psyq/libspu/s_stsa] # 0x8004D8D8
+      - [0x3E130, c, psyq/libspu/s_stm]  # 0x8004D930
+      - [0x3E164, c, psyq/libspu/s_stc]  # 0x8004D964
+      - [0x3E188, c, psyq/libspu/s_sca]  # 0x8004D988
+      - [0x3E51C, c, psyq/libspu/s_srmt] # 0x8004DD1C
+      - [0x3E6F8, c, psyq/libspu/s_sra]  # 0x8004DEF8
+      - [0x3EBC8, c, psyq/libspu/s_crwa] # 0x8004E3C8
+      - [0x3ED64, asm]                   # 0x8004E564
+      - [0x3ED74, c, psyq/libspu/s_srmd] # 0x8004E574
+      - [0x3EDA0, c, psyq/libspu/s_srmdt] # 0x8004E5A0
+      - [0x3EEB8, c, psyq/libspu/s_srmfb] # 0x8004E6B8
+      - [0x3EF74, asm]                   # 0x8004E774
+      - [0x3EF94, c, psyq/libcard/init]  # 0x8004E794
+      - [0x3F050, asm]                   # 0x8004E850
+      - [0x3F288, data, data]    # 0x8004EA88 LIBCARD asm storage (_ExitCard)
+      - [0x3F2A0, data, data_8004EAA0] # kernel.c's overlay file table and boot logo (game data)
+      - [0x3FABC, .data, kernel] # 0x8004F2BC error/menu tables, game state globals
+      - [0x3FB88, .data, game_init] # 0x8004F388
+      - [0x402B8, .data, sprite] # 0x8004FAB8 tpage/visibility-bit tables, identity rendering matrix
+      - [0x403D8, data, data_8004FBD8] # 0x8004FBD8 LZSS image for uploadBuiltinTexture (game data; sprite.c's), 2 pad bytes
+      - [0x404C0, .data, sprite_bytecode] # 0x8004FCC0 sizePerBytecodeTable (opcodes 0x80-0xFF)
+      - [0x40540, .data, shape_transfer] # 0x8004FD40 draw callback per render mode, light matrices
+      - [0x405C0, .data, font]   # 0x8004FDC0 glyph quad corners
+      - [0x405E0, .data, filesystem] # 0x8004FDE0 file system state, movie request bytes
+      - [0x40650, .data, model]  # 0x8004FE50 polyRenderDefs, screen clipping, tpage/CLUT override flags
+      - [0x40910, .data, heap]   # 0x80050110 heap user / content type name tables
+      - [0x40990, .data, dialog] # 0x80050190 text CLUTs, glyph 0xFF 0xFF
+      - [0x409E8, .data, pad]    # 0x800501E8 button remap and d-pad stick tables, vsync callback
+      - [0x40A40, data, data_80050240] # 0x80050240 debug font image (LZSS, game data; debug_font.c's)
+      - [0x40D94, .data, debug_font] # 0x80050594 pAddDebugTextPrim, debugTextPalette
+      - [0x40E18, data, data_80050618] # 0x80050618 asm 281B4's words
+      - [0x40E24, .data, sound_data]   # 0x80050624 sound driver tables (data-only, cc1 -G0)
+      - [0x413F0, data, data_80050BF0] # 0x80050BF0 pitchTable2 (generated pitch curve, game data; sound_data's)
+      - [0x42BF0, data, data_800523F0] # 0x800523F0 sin/cos table (asm 2FF38)
+      - [0x46BF0, .data, psyq/libc/sprintf]    # 0x800563F0
+      - [0x46BFC, .data, psyq/libapi/counter]  # 0x800563FC
+      - [0x46C14, .data, psyq/libapi/pad]      # 0x80056414
+      - [0x46C20, .data, psyq/libcd/sys]       # 0x80056420
+      - [0x46CA0, data, data_800564A0]         # 0x800564A0 'Ps' stamp (04 15)
+      - [0x46CA8, .data, psyq/libcd/bios] # 0x800564A8 LIBCD BIOS state, name tables, command tables
+      - [0x46FB8, data, data_800567B8]         # 0x800567B8 'Ps' stamp (02 15)
+      - [0x46FC0, .data, psyq/libc2/ctype]     # 0x800567C0
+      - [0x47044, .data, psyq/libcd/cdread]    # 0x80056844
+      - [0x47080, data, data_80056880]         # 0x80056880 'Ps' stamp (07 15)
+      - [0x47088, .data, psyq/libgpu/sys]      # 0x80056888
+      - [0x471F0, data, data_800569F0]         # 0x800569F0 LIBGTE asm 393BC's tables
+      - [0x47830, .data, psyq/libgte/ratan]    # 0x80057030
+      - [0x48034, data, data_80057834]         # 0x80057834 'Ps' stamp (06 15)
+      - [0x4803C, .data, psyq/libetc/vsync]    # 0x8005783C
+      - [0x480A4, .data, psyq/libetc/intr]     # 0x800578A4
+      - [0x49140, .data, psyq/libetc/intr_vb]  # 0x80058940
+      - [0x49168, .data, psyq/libetc/intr_dma] # 0x80058968
+      - [0x49190, .data, psyq/libetc/vmode]    # 0x80058990
+      - [0x49194, data, data_80058994]         # 0x80058994 'Ps' stamp (11 17)
+      - [0x4919C, .data, psyq/libspu/s_ini]    # 0x8005899C
+      - [0x49608, .data, psyq/libspu/spu]      # 0x80058E08
+      - [0x49664, .data, psyq/libspu/s_m_init] # 0x80058E64
+      - [0x49670, .data, psyq/libspu/s_srmt]   # 0x80058E70
+      - [0x49968, data, data_80059168]         # 0x80059168 'Ps' stamp (03 0C)
+      # .sdata starts at $gp (0x80059170). cc1 -G8 (-mgpopt) writes a file's
+      # data ahead of its code, so a -G8 file reaches every small global it
+      # defines through $gp: a chunk whose users all use %hi/%lo is no user's.
+      - {start: 0x49970, type: .sdata, name: globals, linker_section_order: .data}  # 0x80059170 = $gp: g_menuOpenArg..D_80059180 (data-only -G8 file)
+      - {start: 0x49984, type: .sdata, name: task, linker_section_order: .data}  # 0x80059184 task id and list counters
+      - {start: 0x49990, type: .sdata, name: sprite, linker_section_order: .data} # 0x80059190 spriteTransfertListHead, specialEffectSpriteY/X
+      - {start: 0x49998, type: sdata, linker_section_order: .data}         # 0x80059198 fieldDrawEnvsInitialized..isFxFragmentsSetup (every user %hi/%lo)
+      - {start: 0x499B8, type: .sdata, name: sprite_actor, linker_section_order: .data} # 0x800591B8 loadVramSpriteParam, two unreferenced words
+      - {start: 0x499C4, type: .sdata, name: heap, linker_section_order: .data}  # 0x800591C4 LibLS banner (" " and its pointer), short strings, D_800592B8
+      - {type: .sbss, vram: 0x800592BC, name: kernel, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x800592E4, name: sprite, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x800592EC, name: sprite_actor, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x800592F8, name: shape_transfer, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x80059308, name: model, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x80059318, name: heap, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x80059348, name: heap_debug, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x8005934C, name: dialog, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x80059370, name: pad, linker_section_order: .bss}
+      - {type: .sbss, vram: 0x80059394, name: debug_font, linker_section_order: .bss}
+      - {type: bss, vram: 0x800593A4, name: bss}         # SDK asm objects' .sbss (3128C, 3145C, 3BCAC, 3F050)
+      - {type: bss, vram: 0x80059404, name: bss_2}       # small COMMON (the linker's order)
+      - {type: .bss, vram: 0x800595E8, name: kernel}
+      - {type: .bss, vram: 0x800596F8, name: filesystem}
+      - {type: .bss, vram: 0x80059F64, name: light}
+      - {type: .bss, vram: 0x80059FA4, name: heap}
+      - {type: .bss, vram: 0x80059FD8, name: dialog}
+      - {type: .bss, vram: 0x8005A0FC, name: pad}
+      - {type: .bss, vram: 0x8005A1CC, name: printf}
+      - {type: .bss, vram: 0x8005A1DC, name: battle_env}
+      - {type: .bss, vram: 0x8005A1FC, name: psyq/libc2/rand}
+      - {type: .bss, vram: 0x8005A200, name: psyq/libapi/pad}
+      - {type: .bss, vram: 0x8005A210, name: psyq/libcd/bios}
+      - {type: .bss, vram: 0x8005A234, name: psyq/libc2/putchar}
+      - {type: .bss, vram: 0x8005A238, name: psyq/libgpu/sys}
+      - {type: .bss, vram: 0x8005A37C, name: psyq/libgpu/tmd}
+      - {type: bss, vram: 0x8005A39C, name: bss_3}       # COMMON (the linker's order)
+  - [0x49ABC]

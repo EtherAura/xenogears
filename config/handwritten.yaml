@@ -1,0 +1,84 @@
+# Functions that were hand-written assembly in the original, not compiler
+# output. They stay as .s files by policy (only GTE, $sp/$ra and pollhost
+# inline asm is allowed in C), so tools/progress.py counts them in a column of
+# their own: "C" stays the strict number, "C+asm" shows how much of the
+# module is either matched C or sha1-verified hand-written assembly.
+#
+# Names are the symbol-file names (JP uses the US names); progress.py warns
+# about a name that no version defines, so renames are caught. Signs of
+# hand-written code: $t registers where GCC would use $v/$a, addi/sub,
+# instructions in branch delay slots GCC leaves empty, multi-entry routines,
+# registers saved below $sp, mtc2/mfc2 without the interlock nops.
+
+main:
+  - about: 0x80019524 entry point (startup code); func_80019548 is JP only
+    names: [startKernel, clearMemoryRange, func_80019548]
+  - about: 0x8002E010-0x8003014C GTE render loops, one per primitive type (multi-entry, registers saved below $sp)
+    names: [prim3_0, finishPrimRenderLoop, prim6_2, primF_2, prim6_3, primF_3,
+            prim0_1, prim4_4, prim5_5, FT3_FAKE, GT3_FAKE, prim2_1,
+            prim8_1, primD_1, primD_4, primD_5]
+  - about: 0x80026F44 palette fade/lerp (addi, bne $zero,rX operand order, no delay-slot use)
+    names: [fadePaletteColors, lerpPaletteColors]
+  - about: 0x80030750 self-patched render code and its patcher
+    names: [prim10_0, patchSelfModifyingCode]
+  - about: 0x800315A0 add-to-OT stubs
+    names: [addPolyF3, addPolyFT3, addPolyG3, addPolyGT3, addPolyF4, addPolyFT4, addPolyG4,
+            addPolyGT4, addLineF2, addLineG2, addLineF3, addLineG3, addLineF4, addLineG4,
+            addSPRT, addSprt16, addDebugTextPrim2, addTile, addTile16, addTile8, addTile1]
+  - about: 0x80032E88 mallocAndDecompress falls into the LZSS decoder
+    names: [mallocAndDecompress, decompress]
+  - about: 0x800379B4 la with an empty delay slot, tail calls
+    names: [setBattlingMainTaskIndex, sprintf_screen, debugFontNop]
+  - about: 0x8003F738 sin/cos table readers
+    names: [createRotationMatrix, getAngleCos, getAngleSin]
+  - about: PSY-Q SDK BIOS call stubs (A0/B0/C0 tables), pad and event patches; func_80040554 is JP only
+    names: [FlushCache, _bu_init, OpenEvent, CloseEvent, EnableEvent, DisableEvent,
+            EnterCriticalSection, ExitCriticalSection, SwEnterCriticalSection,
+            SwExitCriticalSection, func_80040534, func_80040554, ChangeClearPAD, InitPAD2,
+            StartPAD2, StopPAD2, PAD_init2, SysEnqIntRP, SysDeqIntRP,
+            EnablePAD, DesablePAD, _patch_pad, _SendPAD, _send_pad, func_80040C20,
+            _remove_ChgclrPAD, DeliverEvent, GPU_cw]
+  - about: PSY-Q SDK LIBGTE assembly objects (0x80048BBC-0x8004B32C)
+    names: [InitGeom, SquareRoot0, InvSquareRoot, VectorNormalS, VectorNormal, VectorNormalSS,
+            VectorNormalInner, MatrixNormal, LoadAverage12, LoadAverage0, LoadAverageShort12,
+            LoadAverageShort0, LoadAverageByte, LoadAverageCol, MulMatrix0, CompMatrix,
+            ApplyMatrixLV, ApplyRotMatrix, PushMatrix, PopMatrix, ScaleMatrixL, SetMulMatrix,
+            ApplyRotMatrixLV, MulMatrix, MulMatrix2, ApplyMatrix, ApplyMatrixSV, TransMatrix,
+            ScaleMatrix, SetRotMatrix, SetLightMatrix, SetColorMatrix, SetTransMatrix,
+            SetVertex0, SetVertex1, SetVertex2, SetVertexTri, SetRGBfifo, SetIR123, SetIR0,
+            SetSZfifo3, SetSZfifo4, SetSXSYfifo, SetRii, SetMAC123, SetData32, SetDQA, SetDQB,
+            ReadGeomOffset, ReadGeomScreen, SetBackColor, SetFarColor, SetGeomOffset,
+            SetGeomScreen, LocalLight, DpqColor, NormalColor, NormalColor3, NormalColorDpq,
+            NormalColorDpq3, NormalColorCol, NormalColorCol3, ColorDpq, ColorCol, AverageSZ3,
+            AverageSZ4, LightColor, DpqColorLight, DpqColor3, Intpl, Square12, Square0,
+            AverageZ3, AverageZ4, OuterProduct12, OuterProduct0, Lzc, RotTransSV, SquareSS12,
+            SquareSS0, SquareSL12, SquareSL0, RotTransPers, RotTransPers3, RotTrans, NormalClip,
+            RotTransPers4, RotAverage4, RotAverageNclip4, TransposeMatrix, RotMatrixYXZ,
+            RotMatrixZYX, RotMatrixX, RotMatrixY, RotMatrixZ]
+  - about: PSY-Q SDK PATCHGTE, setjmp/longjmp, LIBSN PC file stubs, LIBCARD patches
+    names: [_patch_gte, func_8004B51C, ChangeClearRCnt, setjmp, longjmp, _96_remove,
+            ReturnFromException, ResetEntryInt, HookEntryInt, PCopen, PCclose, PClseek,
+            PCcreat, PCinit, _SN_read, _SN_write, WaitEvent, SpuGetReverbModeType,
+            _card_info, InitCARD2, StartCARD2, StopCARD2, _patch_card,
+            func_8004E960, _patch_card2, func_8004E9FC, _ExitCard]
+
+battling:
+  - about: 0x80072D18 ground renderer and vector/matrix helpers ($t registers, filled delay slots)
+    names: [renderBattlingGround, scaleBattlingSVector, func_800730AC, func_800730F4,
+            blurBattlingImage, scaleBattlingMatrixBySVector, copyBattlingWords]
+  - about: 0x80088BFC is not code but a one-entry function table {battlingMainTask} in .text
+    names: [battlingMainTaskTable]
+  - about: 0x8008BB00 thread context save/restore
+    names: [func_8008BB00, func_8008BB1C, resumeBattlingThread, yieldBattlingThread]
+  - about: 0x8008C3A8 software-pipelined GTE shadow loops
+    names: [projectBattlingShadowVertices, renderBattlingShadowTris, renderBattlingShadowQuads]
+  - about: 0x8008DDFC GTE helpers ($t registers, $ra saved and never reloaded)
+    names: [rotateScaleBattlingSVector, renderBattlingParticleTileAsm]
+
+video_player:
+  - about: PSY-Q LIBPRESS VLC decoders (VLC.OBJ and VLC_C.OBJ are both assembly)
+    names: [DecDCTvlcSize, DecDCTvlc, DecDCTvlcSize2, DecDCTvlc2]
+
+worldmap:
+  - about: 0x8009980C ground cell renderer ($t registers, $s5 saved above its own frame)
+    names: [drawWorldmapGroundCellSub0, drawWorldmapCellBillboards]

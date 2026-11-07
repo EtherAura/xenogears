@@ -1,0 +1,17 @@
+name: Battle debugger (12/06, dev kit only)
+sha1: 55b3094fec62360b08b9812d1af437c51f189ad5
+# Same files as US (US names in the symbol file); JP-only differences under
+# #if VERSION_JP or as JP assembly.
+segments:
+  - name: battle_debug
+    type: code
+    start: 0x0
+    vram: 0x80280000
+    subsegments:
+      - [0x0, .rodata, bd_8028022C]             # 0x80280000
+      - [0x86, linkfill]                        # linker fill
+      - [0x88, .rodata, bd_80280844]            # 0x80280088 after linker fill
+      - [0x22C, c, bd_8028022C]                 # 0x8028022C
+      - [0x844, c, bd_80280844]                 # 0x80280844
+      - [0x210C, data, data]                    # 0x8028210C
+  - [0x21C8]

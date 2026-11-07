@@ -1,0 +1,13 @@
+name: "Battle effect helper 0E/06: actor tiled across the screen (opcode 0x24)"
+sha1: a1426ee3b46615979bfb1c9c6e90d53e717518c1
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_tiled_sprite
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, .rodata, fx_801FC000]            # 0x801FC000 JP's zeroed SVECTOR v[4] initialiser
+      - [0x20, c, fx_801FC000]                 # 0x801FC020
+  - [0x8A8]

@@ -1,0 +1,13 @@
+name: "Battle effect helper 0E/02: circular screen warp (slot 0, never loaded: leftover test)"
+sha1: 3bb3697e14dabe190135aa7b76ce3b849b7813b1
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_circle_warp
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+      - [0x6D0, data, data]                     # 0x801FC6D0
+  - [0x700]

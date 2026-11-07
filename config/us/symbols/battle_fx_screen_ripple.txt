@@ -1,0 +1,15 @@
+// ---- Noah names (naming pass, work/naming) ----
+battleMechaPartyTextureLocations = 0x800C3668;
+createBattleStartEffect = 0x801FC470; // type:func
+fxScreenRipple_update = 0x801FC000; // type:func
+fxScreenRipple_draw = 0x801FC11C; // type:func
+freeFxScreenRipple = 0x801FC400; // type:func
+fxScreenRipple_delete = 0x801FC434; // type:func
+initFxScreenRipple = 0x801FC4A8; // type:func
+playFxScreenRipple = 0x801FC898; // type:func
+runFxScreenRippleLoop = 0x801FC8F4; // type:func
+battleBssBlock = 0x800C3EB0;
+fxScreenRippleAnimatePhase = 0x801FCE14;
+fxScreenRippleTriVertsTopLeft = 0x801FCE18;
+fxScreenRippleTriVertsBottomRight = 0x801FCE30;
+fxScreenRippleOT = 0x801FCE48;

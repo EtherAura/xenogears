@@ -1,0 +1,18 @@
+name: Gear model/render library (10/0C, Noah fieldMechaOverlay)
+sha1: 26c0034b549a901341844920dd2249223ab8806a
+# One provisional C file for now: all of it is ASPSX < 2.50 (`li` is ori),
+# none of it uses $gp, and its .rodata is four jump tables, each 8-aligned
+# from 0x801DC000 (no file-boundary evidence yet).
+segments:
+  - name: field_mecha
+    type: code
+    start: 0x0
+    vram: 0x801DC000
+    subsegments:
+      - [0x0, .rodata, field_mecha]    # 0x801DC000 jump tables
+      - [0x40, .rodata, fm_801E34BC]   # 0x801DC040 jump tables
+      - [0x22C, c, field_mecha]        # 0x801DC22C
+      - [0x5A14, c, fm_801E1A14]       # 0x801E1A14 gear cloth
+      - [0x74BC, c, fm_801E34BC]       # 0x801E34BC
+      - [0xC590, data, data]           # 0x801E8590
+  - [0xC6B4]

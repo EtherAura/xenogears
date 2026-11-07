@@ -1,0 +1,13 @@
+name: Party member change menu (10/06, Noah menu1)
+sha1: fe29ab88a0963fabd389a5c7912db3fd461d7902
+# First pass: text bounds from call targets / prologues and the last jr $ra.
+segments:
+  - name: menu_party
+    type: code
+    start: 0x0
+    vram: 0x801C5000
+    subsegments:
+      - [0x0, .rodata, pt_801C5018]
+      - [0x18, c, pt_801C5018]
+      - [0x6180, data, data]
+  - [0x659C]

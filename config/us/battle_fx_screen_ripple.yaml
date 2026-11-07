@@ -1,0 +1,12 @@
+name: "Battle effect helper 0E/08: captured screen rippling into triangles (opcode 0x54)"
+sha1: 6268b38bf642d6da7682a152117538de93d14413
+# One file: gcc-2.7.2-cdk, ASPSX >= 2.50, no $gp. US only for now.
+segments:
+  - name: battle_fx_screen_ripple
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+      - [0xE14, data, data]                     # 0x801FCE14
+  - [0xE4C]

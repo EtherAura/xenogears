@@ -1,0 +1,59 @@
+name: Field overlay (01/0E)
+sha1: 7bdc0e2be7797ab821fb7d0ce10438a0e91f4c7b
+# Provisional source files, named by start address until their contents
+# are known. Starts follow the .rodata layout: GCC puts a file's constants
+# ahead of its jump tables, so constants after a jump table start a new
+# file. All of it is ASPSX < 2.50 (`li` is ori) and none uses $gp.
+segments:
+  - name: field
+    type: code
+    start: 0x0
+    vram: 0x8006FAF0
+    subsegments:
+      - [0x0, rodata]                  # 0x8006FAF0
+      - [0x4, .rodata, f_8006FDEC] # 0x8006FAF4
+      - [0x14, .rodata, f_80072140] # 0x8006FB04
+      - [0x90, rodata]                  # 0x8006FB80 "Clear OTAG" + stray padding byte
+      - [0x9C, .rodata, f_80078B5C] # 0x8006FB8C
+      - [0x11C, .rodata, f_8008083C] # 0x8006FC0C
+      - [0x184, rodata] # 0x8006FC74 "ERROR ID0 ACT=%d\n" + stray pad bytes
+      - [0x198, .rodata, f_80086D8C] # 0x8006FC88
+      - [0x1B8, .rodata, f_80091944] # 0x8006FCA8
+      - [0x22C, .rodata, f_800972F4] # 0x8006FD1C
+      - [0x240, .rodata, f_80099AC0] # 0x8006FD30
+      - [0x254, .rodata, f_800A1730] # 0x8006FD44 "STACKERR ACT=%d\n"
+      - [0x268, .rodata, f_800A19B0] # 0x8006FD58 jump table, EVENTLOOP, SAVESIZE
+      - [0x2BC, .rodata, f_800A55B8] # 0x8006FDAC
+      - [0x2D8, .rodata, f_800A9274] # 0x8006FDC8 "PARTICLE  "
+      - [0x2E8, .rodata, f_800AA9DC] # 0x8006FDD8
+      - [0x2FC, c, f_8006FDEC] # 0x8006FDEC
+      - [0x1F74, c, f_80071A64] # 0x80071A64
+      - [0x23F8, c, f_80071EE8] # 0x80071EE8
+      - [0x2650, c, f_80072140] # 0x80072140
+      - [0x7AD0, c, f_800775C0] # 0x800775C0
+      - [0x906C, c, f_80078B5C] # 0x80078B5C
+      - [0xDE4C, c, f_8007D93C] # 0x8007D93C
+      - [0xE208, c, f_8007DCF8] # 0x8007DCF8
+      - [0x10D4C, c, f_8008083C] # 0x8008083C
+      - [0x1729C, c, f_80086D8C] # 0x80086D8C
+      - [0x1FF48, c, f_8008FA38] # 0x8008FA38
+      - [0x21E54, c, f_80091944] # 0x80091944
+      - [0x26434, c, f_80095F24] # 0x80095F24
+      - [0x26588, c, f_80096078] # 0x80096078
+      - [0x26724, c, f_80096214] # 0x80096214
+      - [0x26B54, c, f_80096644] # 0x80096644
+      - [0x26D54, c, f_80096844] # 0x80096844
+      - [0x27804, c, f_800972F4] # 0x800972F4
+      - [0x29FD0, c, f_80099AC0] # 0x80099AC0
+      - [0x2C01C, c, f_8009BB0C] # 0x8009BB0C
+      - [0x2D480, c, f_8009CF70] # 0x8009CF70
+      - [0x2DF2C, c, f_8009DA1C] # 0x8009DA1C
+      - [0x31C40, c, f_800A1730] # 0x800A1730 call stack (STACKERR)
+      - [0x31EC0, c, f_800A19B0] # 0x800A19B0 script VM (split by .rodata: jump table 8-aligned from 0x8006FD58)
+      - [0x34CE4, c, f_800A47D4] # 0x800A47D4
+      - [0x35AC8, c, f_800A55B8] # 0x800A55B8
+      - [0x39784, c, f_800A9274] # 0x800A9274
+      - [0x3AEEC, c, f_800AA9DC] # 0x800AA9DC
+      - [0x3D334, c, f_800ACE24] # 0x800ACE24 gear on/off state of party slots
+      - [0x3DF78, data, data]         # 0x800ADA68
+  - [0x3FAFE]

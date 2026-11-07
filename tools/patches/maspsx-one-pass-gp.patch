@@ -1,0 +1,122 @@
+--- a/maspsx/__init__.py
++++ b/maspsx/__init__.py
+@@ -463,7 +463,16 @@
+         gp_allow_la=False,
+         use_comm_section=False,
+         use_comm_for_lcomm=False,
++        one_pass_gp=False,
++        lcomm_word_align=False,
+     ):
++        # Xenogears: ASPSX decides $gp when it reads an instruction, so a
++        # symbol declared later in the file (cc1 -G0 output puts .comm/.lcomm
++        # after the code) is not small yet; ASPSX <= 2.34 word-aligns every
++        # .lcomm (u8/u16/8-byte statics take 4-byte slots).
++        self.one_pass_gp = one_pass_gp
++        self.lcomm_word_align = lcomm_word_align
++        self.decl_idx: dict[str, int] = {}
+         self.lines = [x.strip() for x in lines]
+ 
+         self.sdata_limit = sdata_limit
+@@ -495,7 +504,7 @@
+         in_sdata = False
+         uses_size = False
+ 
+-        for line in self.lines:
++        for idx, line in enumerate(self.lines):
+             if line == "":
+                 continue
+ 
+@@ -541,6 +550,7 @@
+                 _, var = line.split()
+                 symbol, size_str, *_ = var.split(",")
+                 size = int(size_str)
++                self.decl_idx.setdefault(symbol, idx)
+                 if size <= self.sdata_limit:
+                     self.sbss_entries[symbol] = size
+                 else:
+@@ -562,6 +572,7 @@
+                 if not uses_size:
+                     if line.endswith(":"):
+                         current_symbol = line.replace(":", "")
++                        self.decl_idx.setdefault(current_symbol, idx)
+                         self.sdata_entries[current_symbol] = 0
+                     else:
+                         if line.startswith(".type"):
+@@ -635,7 +646,9 @@
+                     res.append(f"\t.comm {symbol},{size}")
+                     continue
+ 
+-                if section == "sbss":
++                if self.lcomm_word_align:
++                    res.append("\t.align 2")
++                elif section == "sbss":
+                     if size >= 8:
+                         res.append("\t.align 3")
+                     elif size >= 4:
+@@ -676,6 +689,13 @@
+ 
+         return ""  # warn user?
+ 
++    def _declared_small(self, symbol: str) -> bool:
++        if not (symbol in self.sdata_entries or symbol in self.sbss_entries):
++            return False
++        if self.one_pass_gp and self.decl_idx.get(symbol, -1) > self.line_index:
++            return False
++        return True
++
+     def _uses_gp(self, line: str) -> bool:
+         if self.sdata_limit == 0:
+             return False
+@@ -699,9 +719,7 @@
+                     symbol = operand
+                     gp_allowed = True
+ 
+-                if gp_allowed and (
+-                    symbol in self.sbss_entries or symbol in self.sdata_entries
+-                ):
++                if gp_allowed and self._declared_small(symbol):
+                     return True
+ 
+         return False
+@@ -1000,9 +1018,7 @@
+                     gp_rel = f"%gp_rel({symbol})($gp)"
+                     gp_allowed = True
+ 
+-                if gp_allowed and (
+-                    symbol in self.sdata_entries or symbol in self.sbss_entries
+-                ):
++                if gp_allowed and self._declared_small(symbol):
+                     res.append(f"{op}\t{r_dest},{gp_rel}")
+                 else:
+                     res.append(line)
+@@ -1091,9 +1107,7 @@
+                 if op == "la" and not self.gp_allow_la:
+                     gp_allowed = False
+ 
+-                if gp_allowed and (
+-                    symbol in self.sdata_entries or symbol in self.sbss_entries
+-                ):
++                if gp_allowed and self._declared_small(symbol):
+                     res.append(f"{op}\t{r_dest},{gp_rel}")
+                 else:
+                     res.append(line)
+--- a/maspsx.py
++++ b/maspsx.py
+@@ -62,6 +62,8 @@
+     parser.add_argument("--passthrough", action="store_true")
+     parser.add_argument("--use-comm-section", action="store_true")
+     parser.add_argument("--use-comm-for-lcomm", action="store_true")
++    parser.add_argument("--one-pass-gp", action="store_true")
++    parser.add_argument("--lcomm-word-align", action="store_true")
+     # decomp.me debugging
+     parser.add_argument("--print-output", action="store_true")
+     parser.add_argument("--print-input", action="store_true")
+@@ -152,6 +154,8 @@
+             gp_allow_la=version_config.gp_allow_la,
+             use_comm_section=args.use_comm_section,
+             use_comm_for_lcomm=args.use_comm_for_lcomm,
++            one_pass_gp=args.one_pass_gp,
++            lcomm_word_align=args.lcomm_word_align,
+         )
+ 
+     try:

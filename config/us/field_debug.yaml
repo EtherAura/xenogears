@@ -1,0 +1,13 @@
+name: Field debugger (04/AD, dev kit only)
+sha1: c1a14ac047f4608adf15c559a4f29f6c0e80cab8
+# One provisional file (code starts right after the 255-entry jump table): ASPSX < 2.50 (ori), no divide checks, no $gp.
+segments:
+  - name: field_debug
+    type: code
+    start: 0x0
+    vram: 0x80280000
+    subsegments:
+      - [0x0, .rodata, fd_802811EC]             # 0x80280000
+      - [0x11EC, c, fd_802811EC]                      # 0x802811EC
+      - [0x596C, data, data]                    # 0x8028596C
+  - [0x61C8]

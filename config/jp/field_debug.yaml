@@ -1,0 +1,13 @@
+name: Field debugger (04/AD, dev kit only)
+sha1: 178d311ab81709d65a16586e75e16eb2b143b3c5
+# One provisional file (code starts right after the 255-entry jump table) (US names).
+segments:
+  - name: field_debug
+    type: code
+    start: 0x0
+    vram: 0x80280000
+    subsegments:
+      - [0x0, .rodata, fd_802811EC]             # 0x80280000
+      - [0x1204, c, fd_802811EC]                      # 0x80281204
+      - [0x59C0, data, data]                    # 0x802859C0
+  - [0x621C]

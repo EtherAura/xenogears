@@ -1,0 +1,17 @@
+name: Battle debugger (12/06, dev kit only)
+sha1: 747c852032275c234299fc77a010323946884efb
+# Provisional files: func_8028022C is ASPSX < 2.50 (ori), the rest ASPSX >= 2.50.
+# US only for now (JP: 2 of 16 functions identical).
+segments:
+  - name: battle_debug
+    type: code
+    start: 0x0
+    vram: 0x80280000
+    subsegments:
+      - [0x0, .rodata, bd_8028022C]             # 0x80280000
+      - [0x86, linkfill]                        # linker fill
+      - [0x88, .rodata, bd_80280844]            # 0x80280088
+      - [0x22C, c, bd_8028022C]                 # 0x8028022C
+      - [0x844, c, bd_80280844]                 # 0x80280844 ASPSX >= 2.50
+      - [0x2034, data, data]                    # 0x80282034
+  - [0x20F0]

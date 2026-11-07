@@ -1,0 +1,6 @@
+// ---- Noah names (naming pass, work/naming) ----
+getFxSpriteBandBounds = 0x801FC000; // type:func
+fxSpriteBand_update = 0x801FC0EC; // type:func
+drawFxSpriteBandCopy = 0x801FC110; // type:func
+fxSpriteBand_draw = 0x801FC5C4; // type:func
+createFxSpriteBand = 0x801FC6FC; // type:func

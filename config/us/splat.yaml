@@ -1,0 +1,6 @@
+# Version-wide splat options for the US release.
+options:
+  # Set by the executable's entry point (0x80019550).
+  gp_value: 0x80059170
+  string_encoding: ASCII
+  data_string_encoding: ASCII

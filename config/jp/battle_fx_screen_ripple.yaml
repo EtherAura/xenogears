@@ -1,0 +1,13 @@
+name: "Battle effect helper 0E/08: captured screen rippling into triangles (opcode 0x54)"
+sha1: 37066a32932f1ca69f6fb7dc35b0378dda30604b
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: battle_fx_screen_ripple
+    type: code
+    start: 0x0
+    vram: 0x801FC000
+    subsegments:
+      - [0x0, c, fx_801FC000]                  # 0x801FC000
+      - [0xE58, data, data]                     # 0x801FCE58
+  - [0xE90]

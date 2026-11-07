@@ -1,0 +1,17 @@
+name: Battle event module (20/01)
+sha1: 846845462141838c9b94a4a61c315b0876bde352
+# The event interpreter (gcc-2.6.3, ASPSX < 2.50) and, from 0x801E93E8, the
+# sprite-actor helpers built with gcc-2.7.2 CDK and ASPSX >= 2.50. JP builds
+# its tail (from 0x801E9420) with the rest of the overlay, so the tail is a
+# file per version. No divide checks, no $gp.
+segments:
+  - name: battle_event
+    type: code
+    start: 0x0
+    vram: 0x801E5000
+    subsegments:
+      - [0x0, .rodata, be_801E5160]             # 0x801E5000 jump tables
+      - [0x160, c, be_801E5160]                 # 0x801E5160
+      - [0x43E8, c, be_801E93E8]                # 0x801E93E8 gcc-2.7.2-cdk, ASPSX >= 2.50
+      - [0x4B5C, data, data]                    # 0x801E9B5C
+  - [0x4C3C]

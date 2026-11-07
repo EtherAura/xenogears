@@ -1,0 +1,39 @@
+name: World map overlay (01/0F)
+sha1: 9526ca2a107cc694806ec6599d54d277e36859cd
+# Same files as config/us/worldmap.yaml (shared src/worldmap C), at JP offsets
+# derived with tools/map_versions.py: 384 of 385 functions are identical after
+# masking (func_800712D0 differs); JP has no US func_80076594.
+segments:
+  - name: worldmap
+    type: code
+    start: 0x0
+    vram: 0x8006F180
+    subsegments:
+      - [0x0, rodata]                     # 0x8006F180
+      - [0x4, .rodata, w_80070CFC]        # 0x8006F184
+      - [0x50, .rodata, w_800736DC]       # 0x8006F1D0
+      - [0xD4, .rodata, w_8007A06C]       # 0x8006F254
+      - [0x160, .rodata, w_8007BF50]      # 0x8006F2E0
+      - [0x29C, .rodata, w_8007CC6C]      # 0x8006F41C
+      - [0x6F0, .rodata, w_8007FD30]      # 0x8006F870
+      - [0x7F4, .rodata, w_80080578]      # 0x8006F974
+      - [0x9A0, .rodata, w_800834D0]      # 0x8006FB20
+      - [0xCBC, .rodata, w_8008BD1C]      # 0x8006FE3C
+      - [0xF08, .rodata, w_8008E034]      # 0x80070088
+      - [0x1064, .rodata, w_800907F4]     # 0x800701E4
+      - [0x1160, .rodata, w_80094A5C]     # 0x800702E0
+      - [0x120C, c, w_80070CFC]           # 0x8007038C
+      - [0x3B84, c, w_800736DC]           # 0x80072D04
+      - [0xA2D4, c, w_8007A06C]           # 0x80079454
+      - [0xC1B8, c, w_8007BF50]           # 0x8007B338
+      - [0xCED4, c, w_8007CC6C]           # 0x8007C054
+      - [0xFF98, c, w_8007FD30]           # 0x8007F118
+      - [0x107E0, c, w_80080578]          # 0x8007F960
+      - [0x13738, c, w_800834D0]          # 0x800828B8
+      - [0x1BF84, c, w_8008BD1C]          # 0x8008B104
+      - [0x1E29C, c, w_8008E034]          # 0x8008D41C
+      - [0x20A5C, c, w_800907F4]          # 0x8008FBDC
+      - [0x24CC4, c, w_80094A5C]          # 0x80093E44
+      - [0x29A74, c, w_8009980C]          # 0x80098BF4
+      - [0x2A0F4, data, data]             # 0x80099274
+  - [0x2BE23]

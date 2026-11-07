@@ -1,0 +1,20 @@
+name: "Battle loader (0C/04, Noah battleLoader/battleSpriteLoader, battle start effects)"
+sha1: 154c5e85056199efa52b261e2b08e607361530ec
+# Same files as US (US names in the symbol file); JP-only differences under
+# #if VERSION_JP or as JP assembly.
+segments:
+  - name: battle_loader
+    type: code
+    start: 0x0
+    vram: 0x801E4000
+    subsegments:
+      - [0x0, .rodata, bld_801E70E8]            # 0x801E4000
+      - [0x20, .rodata, bld_801E7F4C]           # 0x801E4020
+      - [0x34, .rodata, bld_801E91E8]           # 0x801E4034
+      - [0x48, c, bld_801E4048]                 # 0x801E4048
+      - [0x22E0, c, bld_801E62E0]               # 0x801E62E0
+      - [0x3108, c, bld_801E70E8]               # 0x801E7108
+      - [0x3F6C, c, bld_801E7F4C]               # 0x801E7F6C
+      - [0x5244, c, bld_801E91E8]               # 0x801E9244
+      - [0x5664, data, data]                    # 0x801E9664
+  - [0x5768]

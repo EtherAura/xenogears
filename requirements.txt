@@ -1,0 +1,9 @@
+# Python tooling. Installed into .venv by tools/setup.sh; keep versions pinned
+# so splits and matches are reproducible.
+splat64[mips]==0.50.0
+spimdisasm==1.42.4
+rabbitizer==1.16.2
+pyyaml==6.0.3
+m2c @ git+https://github.com/matt-kempster/m2c@708d2d2cb2698f091a92492b328f73b24209f72d
+pillow==13.0.0
+numpy==2.5.2

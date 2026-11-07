@@ -1,0 +1,6 @@
+// ---- Noah names (naming pass, work/naming) ----
+getFxTiledSpriteBounds = 0x801FC000; // type:func
+fxTiledSprite_update = 0x801FC0EC; // type:func
+drawFxTiledSpriteCopy = 0x801FC168; // type:func
+fxTiledSprite_draw = 0x801FC508; // type:func
+createFxTiledSprite = 0x801FC7B0; // type:func

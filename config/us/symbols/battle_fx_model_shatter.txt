@@ -1,0 +1,10 @@
+// ---- Noah names (naming pass, work/naming) ----
+getCustomPolySubBufferSize = 0x800B16A4;
+copyCustomPolySubBuffer = 0x800B1720;
+computeDirectionAngles = 0x800C0828;
+fxModelShatter_delete = 0x801FC074; // type:func
+fxModelShatter_update = 0x801FC0CC; // type:func
+fxModelShatter_draw = 0x801FC1A8; // type:func
+createFxModelShatter = 0x801FC4C4; // type:func
+battleBssBlock = 0x800C3EB0;
+fxModelShatterOrigin = 0x801FCE14;

@@ -1,0 +1,48 @@
+name: Battling overlay (01/0D)
+sha1: 9cfebaf201a0dfd352c11007a63ad7a955533b17
+# Provisional source files, named by start address until their contents are
+# known. All compiled code was assembled by ASPSX < 2.50 (`li` is ori) with
+# no divide checks and no $gp; func_8008C3A8 is handwritten GTE assembly
+# (the only divides with checks). .rodata is a word, jump tables, constants
+# and strings: a jump table sits 8-aligned from its object's .rodata start,
+# so the tables fall into four objects by address parity. Where each starts
+# in .text is the function boundary in its gap with the fewest calls
+# crossing it; the call graph is too dense to show further files. JP builds
+# from the same files (449 of 456 functions identical after masking).
+segments:
+  - name: battling
+    type: code
+    start: 0x0
+    vram: 0x8006FAF0
+    subsegments:
+      - [0x0, rodata]                     # 0x8006FAF0 a word (no code reference found)
+      - [0x4, .rodata, bl_800707A8]       # 0x8006FAF4 jump tables (parity 4)
+      - [0xD8, .rodata, bl_800725B0]      # 0x8006FBC8 the viewer's strings (parity 0)
+      - [0x108, .rodata, bl_800732CC]     # 0x8006FBF8 jump tables (parity 0)
+      - [0x140, .rodata, bl_80075060]     # 0x8006FC30 strings shared by func_800751C8-func_8007AE10
+      - [0x2F5, linkfill]                 # 0x8006FDE5 linker fill after "COM2 VICTORY"
+      - [0x2F8, .rodata, bl_8007B270]     # 0x8006FDE8 func_8007D190's jump table
+      - [0x32C, .rodata, bl_8007E528]     # 0x8006FE1C jump tables (parity 4), menu strings
+      - [0x6D0, .rodata, bl_80083DCC]     # 0x800701C0 jump tables (parity 0), gear names
+      - [0xBF5, linkfill]                 # 0x800706E5 linker fill after "RATE   : %3dfps\n"
+      - [0xBF8, .rodata, bl_800891C0]     # 0x800706E8 jump tables
+      - [0xC28, .rodata, bl_8008C7C0]     # 0x80070718 jump tables
+      - [0xCB8, c, bl_800707A8]           # 0x800707A8
+      - [0x2AC0, c, bl_800725B0]          # 0x800725B0 gear viewer
+      - [0x3228, asm, bl_80072D18]        # 0x80072D18 hand-written helpers
+      - [0x37DC, c, bl_800732CC]          # 0x800732CC
+      - [0x5570, c, bl_80075060]          # 0x80075060
+      - [0xB780, c, bl_8007B270]          # 0x8007B270 effects
+      - [0xEA38, c, bl_8007E528]          # 0x8007E528
+      - [0x142DC, c, bl_80083DCC]         # 0x80083DCC
+      - [0x196D0, c, bl_800891C0]         # 0x800891C0
+      - [0x1C010, asm, bl_8008BB00]       # 0x8008BB00 hand-written: context save/restore
+      - [0x1C1D8, c, bl_8008BCC8]         # 0x8008BCC8
+      - [0x1C8B8, asm, bl_8008C3A8]       # 0x8008C3A8 hand-written: GTE loops
+      - [0x1CCD0, c, bl_8008C7C0]         # 0x8008C7C0 particles
+      - [0x21448, data, data]             # 0x80090F38
+      - [0x216A8, .data, bl_80075060]     # 0x80091198 D_80091198 (string pointers)
+      - [0x216E4, data, data_800911D4]    # 0x800911D4
+      - [0x21804, .data, bl_8007E528]     # 0x800912F4 difficulty and CPU names
+      - [0x21874, data, data_80091364]    # 0x80091364
+  - [0x22E69]

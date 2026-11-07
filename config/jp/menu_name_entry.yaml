@@ -1,0 +1,14 @@
+name: "Name entry menu (10/08, Noah menu3, the main menu's 'Enter Name' entry)"
+sha1: de11cfdf62f3ada16c50cb896e4810ed5c6c65cc
+# First pass: text bounds from call targets / prologues and the end of the
+# function after the last prologue.
+segments:
+  - name: menu_name_entry
+    type: code
+    start: 0x0
+    vram: 0x801C5000
+    subsegments:
+      - [0x0, .rodata, ne_801C5040]
+      - [0x40, c, ne_801C5040]
+      - [0x6E08, data, data]
+  - [0x709C]

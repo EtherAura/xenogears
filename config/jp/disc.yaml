@@ -1,0 +1,58 @@
+# Xenogears (Japan), SLPS-01160: every unique code-bearing file on Disc 1.
+# Same dir/file IDs as the US release (config/us/disc.yaml); every image
+# differs. The executable is 0x800 bytes shorter, so its BSS ends at
+# 0x8006F17C and the game-mode overlays load at 0x8006F180.
+#
+# Source is either `iso: NAME` (ISO9660 root) or `dir`/`file` in the game's
+# own file table (see tools/xenofs.py). `lzss: true` files are stored
+# compressed; the extracted file is the decompressed image the game loads.
+# `vram` is the load address, documented here for reference; the splat
+# configs are authoritative. Where the same image is stored more than once,
+# `copies` lists the other locations.
+
+image: bin/Xenogears (Japan) (Disc 1)/Xenogears (Japan) (Disc 1).bin
+image_sha256: e4ab5bbca64db33b47242c64589fa6a0398e93b3b576659a1df6132d27fac401
+
+files:
+  # Boot executable: kernel, PSY-Q libraries, shared engine code.
+  - {name: main, iso: SLPS_011.60, vram: 0x80010000, sha1: 3f9633f80213427f55894cda9fc8c3346ecf31b4}
+
+  # Game-mode overlays, loaded at the end of the executable's BSS.
+  - {name: battling, dir: 0x01, file: 0x0D, lzss: true, vram: 0x8006F180, sha1: a33a01ac132e0e9a9b3de6597a544270943b9d83}
+  - {name: field,    dir: 0x01, file: 0x0E, lzss: true, vram: 0x8006F180, sha1: 48aa182287c7449ce089954737b43a2039cf0cfd}
+  - {name: worldmap, dir: 0x01, file: 0x0F, lzss: true, vram: 0x8006F180, sha1: 9526ca2a107cc694806ec6599d54d277e36859cd}
+  - {name: battle,   dir: 0x01, file: 0x10, lzss: true, vram: 0x8006F180, sha1: 0b50a4c474f8184e19cb4de4e857de1fb887306b}
+  - {name: movie,    dir: 0x01, file: 0x12, lzss: true, vram: 0x8006F180, sha1: 7a70f1958d5e38d61ec98cdfa5f2733dc92f141a}
+
+  # Menu overlays (Noah's menu0..menu6 are dir 0x10 files 5..0xB).
+  - {name: menu,           dir: 0x01, file: 0x11, lzss: true, vram: 0x801C5000, sha1: 62ee657ccc294f6a84bac43a1b8b254a7cc0a735, copies: ["10/05", "10/07", "10/0B", "24/25"]}  # 10/xx copies are 7 bytes shorter (no LZSS size padding)
+  - {name: menu_party,     dir: 0x10, file: 0x06, vram: 0x801C5000, sha1: f98261b91d01344cfd26aa0ebd0b0195972b53bc}
+  - {name: menu_name_entry,         dir: 0x10, file: 0x08, vram: 0x801C5000, sha1: de11cfdf62f3ada16c50cb896e4810ed5c6c65cc}
+  - {name: menu_shop,      dir: 0x10, file: 0x09, vram: 0x801C5000, sha1: 36c88a40cdaedee6d3b62d1a6e84b5545724c4d6}
+  - {name: menu_gear_shop, dir: 0x10, file: 0x0A, vram: 0x801C5000, sha1: 5ab0b2d9f0c120c35a4aad50bef73b040c6ad5ad}
+
+  # Gear (mecha) model/render library shared by field and the gear shop.
+  - {name: field_mecha, dir: 0x10, file: 0x0C, vram: 0x801DC000, sha1: c2ad15f658aa5c2c34f56fa3552e458264613a00, copies: ["04/6B9", "24/28"]}
+
+  # STR video playback library, loaded by the movie overlay.
+  - {name: video_player, dir: 0x18, file: 0x01, vram: 0x801D3000, sha1: b663a8295485088b4b5fc06368212def10959c11, copies: ["04/A9"]}
+
+  # Battle sub-modules. 0C/04 and 20/01 overlap in memory, so they are never
+  # resident together.
+  - {name: battle_result,    dir: 0x10, file: 0x04, vram: 0x801DE000, sha1: 7548b4893c1223af10ef05a32ad9d3972a892bce}
+  - {name: battle_debug_selector,    dir: 0x12, file: 0x01, vram: 0x801E0000, sha1: d1c5b98cf267ab2939d3620d3099be26691ae2f8}
+  - {name: battle_loader,    dir: 0x0C, file: 0x04, vram: 0x801E4000, sha1: 154c5e85056199efa52b261e2b08e607361530ec}
+  - {name: battle_event, dir: 0x20, file: 0x01, vram: 0x801E5000, sha1: dea0465574651b39958618c0bd0ace5089199423}
+
+  # Battle effect fragments. Dir 0x0E files 2..0x21 hold 32 entries but only
+  # six distinct images; 0E/02 is repeated 27 times.
+  - {name: battle_fx_circle_warp, dir: 0x0E, file: 0x02, vram: 0x801FC000, sha1: 3bb3697e14dabe190135aa7b76ce3b849b7813b1}
+  - {name: battle_fx_sprite_wobble, dir: 0x0E, file: 0x04, vram: 0x801FC000, sha1: 3d64d8b6857ab8dfc363d0fd74c08831e81f42f0}
+  - {name: battle_fx_model_shatter, dir: 0x0E, file: 0x05, vram: 0x801FC000, sha1: 73028b22b6a16aecaa3e4e4a3c43eeb9765304aa}
+  - {name: battle_fx_tiled_sprite, dir: 0x0E, file: 0x06, vram: 0x801FC000, sha1: a1426ee3b46615979bfb1c9c6e90d53e717518c1}
+  - {name: battle_fx_sprite_band, dir: 0x0E, file: 0x07, vram: 0x801FC000, sha1: 1a29ae0b6f9675b75d7a6f70428c91c68a28c1a4}
+  - {name: battle_fx_screen_ripple, dir: 0x0E, file: 0x08, vram: 0x801FC000, sha1: 37066a32932f1ca69f6fb7dc35b0378dda30604b}
+
+  # Debug tools that need a dev kit's 8 MB of RAM; unreachable on retail.
+  - {name: field_debug,  dir: 0x04, file: 0xAD, vram: 0x80280000, sha1: 178d311ab81709d65a16586e75e16eb2b143b3c5}
+  - {name: battle_debug, dir: 0x12, file: 0x06, vram: 0x80280000, sha1: 55b3094fec62360b08b9812d1af437c51f189ad5}
