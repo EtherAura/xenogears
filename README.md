@@ -1,43 +1,37 @@
 # Xenogears decompilation
 
-Part of **Project Exodus**, an unofficial Xenogears preservation effort.
+Part of -Project Exodus-, an unofficial Xenogears preservation effort.
 
-A matching decompilation of Xenogears (PlayStation, 1998): C source that
-compiles back to byte-identical copies of the game's executable and every code
-overlay, for the US release (SLUS-00664) and the Japanese release
-(SLPS-01160).
+A matching decompilation of Xenogears (PlayStation, 1998). The C here compiles
+back to byte-identical copies of every executable and code overlay of the US
+(SLUS-00664) and Japanese (SLPS-01160) releases, 50 files in all. About 98% of
+the code is C; the rest, mostly in `main`, is still assembly taken from your
+disc when you build.
 
-Every module of both versions rebuilds byte for byte (50 images, each
-SHA-1-checked against retail). About 98% of the code is C; the rest, most of
-it in `main`, is still assembly that the build takes from your disc.
-
-No game data is included. You need your own disc images.
+No game data is included. You need your own discs.
 
 ## Setup
 
-Host requirements: Linux x86-64, bash, curl, git, make, gcc/cpp, python3 and
-ninja. No root access is needed.
+You need Linux x86-64 with bash, curl, git, make, gcc/cpp, Python 3 and Ninja.
+No root access is needed.
 
 ```bash
 tools/setup.sh                       # toolchain -> tools/toolchain, Python deps -> .venv
 source .venv/bin/activate            # fish: source .venv/bin/activate.fish
 ```
 
-Put your disc images under `bin/` using the Redump names listed in
-`config/<version>/disc.yaml`, then extract the code files:
+Put your disc images under `bin/` with the Redump names listed in
+`config/<version>/disc.yaml`, then:
 
 ```bash
-python tools/extract.py --check-image      # every version whose disc is present
-```
-
-Then split, build and verify:
-
-```bash
-python tools/configure.py      # run splat on every module (us + jp), write build.ninja
-ninja                          # rebuild every module and sha1-check it against retail
-python tools/check_bss.py      # C statics at their addresses (the sha1 can't see .bss)
+python tools/extract.py us     # the code files from your disc, checked against retail
+python tools/configure.py us   # split every module with splat, write build.ninja
+ninja                          # rebuild every module and check it against retail
+python tools/check_bss.py      # statics at their addresses (the checksum can't see .bss)
 python tools/progress.py       # matched code per module
 ```
+
+Use `jp` for the Japanese release, or leave the version out to do both.
 
 ## Working on a function
 
@@ -53,9 +47,9 @@ python tools/progress.py       # matched code per module
 
 US and JP build from the same C. JP-only differences go under `#if VERSION_JP`.
 The same C also builds as a native PC port,
-[EtherAura/xenogears-pc](https://github.com/EtherAura/xenogears-pc): that is
-what the `#ifdef PLATFORM_PC` blocks are for. The PlayStation build never
-defines `PLATFORM_PC`, so they compile to nothing there.
+[EtherAura/xenogears-pc](https://github.com/EtherAura/xenogears-pc); the
+`#ifdef PLATFORM_PC` blocks are for it and compile to nothing on the
+PlayStation.
 
 ## Conventions
 
@@ -94,10 +88,6 @@ the game's behaviour.
 
 ## Licence
 
-This project's own work (the C, headers, configs and tools) is free software
-under the GNU General Public License, version 3 or (at your option) any later
-version; the text is in `LICENSE`.
-
-Xenogears is © Square Enix. This project is not affiliated with or endorsed
-by Square Enix, and the licence does not cover the game: its code and data
-come from your own discs and are never part of this repository.
+GPL-3.0 or later, in `LICENSE`, for this project's own work: the C, headers,
+configs and tools. Xenogears is © Square Enix; this project isn't affiliated
+with them, and no game data is included.
