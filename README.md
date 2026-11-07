@@ -1,5 +1,7 @@
 # Xenogears decompilation
 
+Part of **Project Exodus**, an unofficial Xenogears preservation effort.
+
 A matching decompilation of Xenogears (PlayStation, 1998): C source that
 compiles back to byte-identical copies of the game's executable and every code
 overlay, for the US release (SLUS-00664) and the Japanese release
