@@ -1,0 +1,48 @@
+name: A problem with the build or a tool
+description: Setup, extraction, the build, or one of the matching tools does not do what the README says.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not attach anything from the game: no disc images, no extracted files, no dumps
+        of its data. A log and the commands you ran are enough.
+  - type: dropdown
+    id: step
+    attributes:
+      label: Where it goes wrong
+      options:
+        - tools/setup.sh
+        - tools/extract.py
+        - tools/configure.py
+        - ninja (a module does not match)
+        - tools/check_bss.py
+        - a matching tool (say which below)
+        - something else
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Game release
+      options:
+        - US (SLUS-00664)
+        - Japanese (SLPS-01160)
+        - both
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What you ran and what happened
+      description: The commands, and the end of the output. For a module that does not match, its name.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: Distribution, and the commit you are on
+      placeholder: "Debian 13, commit e54f35a"
+    validations:
+      required: true

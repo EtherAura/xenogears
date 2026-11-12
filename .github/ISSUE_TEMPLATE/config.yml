@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/EtherAura/xenogears/security/advisories/new
+    about: Privately. Please do not open a public issue for it.
+  - name: Ask a question, or talk about a function
+    url: https://github.com/EtherAura/xenogears/discussions
+    about: Discussions, for everything that is not a problem with the build or a tool.
+  - name: The PC port
+    url: https://github.com/EtherAura/xenogears-pc
+    about: Problems with running the game on a PC belong in the port's repository.

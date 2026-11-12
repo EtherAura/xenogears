@@ -1,0 +1,68 @@
+name: CI
+
+# What can be checked without the game. The build itself cannot run here: it
+# rebuilds every module and compares it byte for byte with files taken from a
+# retail disc, and no runner has one. That check is run on the maintainer's
+# machine before anything is published to this repository.
+#
+# So this is the rest: every Python tool compiles, every configuration file
+# parses, and every shell script parses with the shell it names. It catches a
+# broken tool or a damaged splat config before somebody's own setup does.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: checks (no game data)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install PyYAML
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3-yaml
+
+      - name: Every Python tool compiles
+        run: python3 -m compileall -q tools
+
+      - name: Every configuration file parses
+        run: |
+          python3 - <<'PY'
+          import pathlib, sys, yaml
+          bad = 0
+          files = sorted(pathlib.Path("config").rglob("*.yaml"))
+          for path in files:
+              try:
+                  yaml.safe_load(path.read_text(encoding="utf-8"))
+              except Exception as error:
+                  bad += 1
+                  print(f"::error file={path}::{str(error).splitlines()[0]}")
+          print(f"{len(files)} configuration files, {bad} do not parse")
+          sys.exit(1 if bad or not files else 0)
+          PY
+
+      - name: Every shell script parses
+        run: |
+          rc=0
+          for f in $(find . -name '*.sh' -not -path './.git/*'); do
+            case "$(head -n 1 "$f")" in
+              '#!'*bash*) shell=bash ;;
+              *) shell=sh ;;
+            esac
+            "$shell" -n "$f" || { echo "::error file=$f::$shell -n failed"; rc=1; }
+          done
+          exit $rc
