@@ -1,7 +1,7 @@
 # Building
 
 This page takes you from a fresh clone to a build that matches the retail game.
-It is the README's Setup section, one step at a time.
+Follow the steps below with your own disc images.
 
 ## What you need
 

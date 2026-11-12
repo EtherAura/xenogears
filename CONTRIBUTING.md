@@ -13,8 +13,8 @@ tools and corrections to the documentation are all welcome.
   configuration from another decompilation of the game. Other projects, the
   hardware documentation and emulators are fine as references for facts: an
   address, which compiler built a file, how the hardware behaves.
-- **Set up and build first.** The README's Setup section is the whole
-  procedure, and [Building](docs/Building.md) walks through it step by step.
+- **Set up and build first.** [Building](docs/Building.md) walks through
+  the whole procedure step by step.
 
 ## What a change has to pass
 
@@ -22,8 +22,7 @@ tools and corrections to the documentation are all welcome.
    releases. A change that makes any module differ by one byte is not ready.
 2. `python tools/check_bss.py` passes. The checksum cannot see `.bss`, so this
    is what checks the statics.
-3. The conventions in the README hold, and [Matching](docs/Matching.md) lists
-   them: a function is matched only when objdiff says it is exact, no `.word`
+3. The conventions in [Matching](docs/Matching.md) hold: a function is matched only when objdiff says it is exact, no `.word`
    or hex bodies, the hardware idioms only through their headers, struct fields
    tagged with their offsets.
 
