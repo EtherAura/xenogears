@@ -10,6 +10,7 @@ English | [日本語](README.ja.md)
 [![CodeQL](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml/badge.svg)](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml)
 [![GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 ![US and JP](https://img.shields.io/badge/retail-US%20%2B%20JP-627eaa)
+[![Listed on Reversed with AI](https://reversedwithai.com/badge.svg)](https://reversedwithai.com/p/xenogears-native-pc-port-from-matching-decomp-claude)
 
 A matching decompilation of Xenogears for PlayStation, with shared C source for the US and Japanese releases.
 Part of **-Project Exodus-**, an unofficial preservation effort.

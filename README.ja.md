@@ -10,6 +10,7 @@
 [![CodeQL](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml/badge.svg)](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml)
 [![GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 ![US and JP](https://img.shields.io/badge/retail-US%20%2B%20JP-627eaa)
+[![Listed on Reversed with AI](https://reversedwithai.com/badge.svg)](https://reversedwithai.com/p/xenogears-native-pc-port-from-matching-decomp-claude)
 
 PlayStation 版ゼノギアスのマッチング逆コンパイル（ビルドすると製品版と 1 バイト単位で一致する逆コンパイル）です。北米版と日本版で C のソースを共有しています。非公式のゲーム保存活動 **-Project Exodus-** の一部です。
 
