@@ -23,9 +23,14 @@ Part of **-Project Exodus-**, an unofficial preservation effort.
 **Bring your own discs.** No game data is included. GitHub CI checks tools and configuration;
 retail matching is checked locally against your images.
 
-**Matching progress.** About 98.2% of code bytes match in C in the measured US and
-Japanese builds. All 25 retail code modules per release rebuild byte-for-byte.
-[Measure C coverage](tools/progress.py) with the retail-verified builds.
+**Matching progress: 100%.** Every function of both releases is matched. About 98.2% of
+the code bytes are C that compiles to the retail bytes. The other 1.8% was written by hand
+in assembly in the original (Sony's PSY-Q library routines, and the game's own GTE render
+loops, LZSS decoder and a few helpers), so it stays assembly, taken from your disc when
+you build. All 25 retail code modules per release rebuild byte-for-byte.
+[Measure it](tools/progress.py) with the retail-verified builds;
+[config/handwritten.yaml](config/handwritten.yaml) lists the hand-written routines and
+the evidence for each.
 
 **Build hosts.** The published build guide targets Linux x86-64. A FreeBSD 15.1 amd64
 test with local compatibility fixes rebuilt and verified all 25 retail code modules per release.

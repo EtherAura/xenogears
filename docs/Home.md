@@ -7,8 +7,10 @@ Part of -Project Exodus-, an unofficial Xenogears preservation effort.
 This is a matching decompilation of Xenogears (PlayStation, 1998). The C in
 this repository compiles back to byte-identical copies of every executable and
 code overlay of the US (SLUS-00664) and Japanese (SLPS-01160) releases, 50
-files in all. About 98% of the code is C. The rest, mostly in `main`, is still
-assembly taken from your disc when you build.
+files in all. The decompilation is complete: every compiled function is C,
+about 98% of the code. The rest, mostly in `main`, was written by hand in
+assembly in the original (Sony's PSY-Q libraries and some of the game's render
+code), so it stays assembly, taken from your disc when you build.
 
 No game data is included. You need your own discs.
 
