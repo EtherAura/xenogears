@@ -15,7 +15,7 @@ English | [日本語](README.ja.md)
 A matching decompilation of Xenogears for PlayStation, with shared C source for the US and Japanese releases.
 Part of **-Project Exodus-**, an unofficial preservation effort.
 
-[**Build from your discs**](docs/Building.md) · [**Matching guide**](docs/Matching.md) · [**PC port**](https://github.com/EtherAura/xenogears-pc) · [**Contribute**](CONTRIBUTING.md)
+[**Website**](https://exodus.agartha.digital/) · [**Build from your discs**](docs/Building.md) · [**Matching guide**](docs/Matching.md) · [**PC port**](https://github.com/EtherAura/xenogears-pc) · [**Contribute**](CONTRIBUTING.md)
 
 ![Workflow from your own discs through extraction and rebuilding to retail byte comparisons](docs/img/matching.svg)
 </div>

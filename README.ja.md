@@ -14,7 +14,7 @@
 
 PlayStation 版ゼノギアスのマッチング逆コンパイル（ビルドすると製品版と 1 バイト単位で一致する逆コンパイル）です。北米版と日本版で C のソースを共有しています。非公式のゲーム保存活動 **-Project Exodus-** の一部です。
 
-[**手持ちのディスクからビルド**](docs/Building-ja.md) · [**マッチングガイド**](docs/Matching-ja.md) · [**PC 移植版**](https://github.com/EtherAura/xenogears-pc) · [**開発に参加**](CONTRIBUTING.ja.md)
+[**ウェブサイト**](https://exodus.agartha.digital/) · [**手持ちのディスクからビルド**](docs/Building-ja.md) · [**マッチングガイド**](docs/Matching-ja.md) · [**PC 移植版**](https://github.com/EtherAura/xenogears-pc) · [**開発に参加**](CONTRIBUTING.ja.md)
 
 ![手持ちのディスクから、抽出と再ビルドを経て、製品版とのバイト単位の比較に至るまでの流れ](docs/img/matching.svg)
 </div>
