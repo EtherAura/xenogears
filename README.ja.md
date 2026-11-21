@@ -1,0 +1,29 @@
+[English](README.md) | 日本語
+
+<div align="center">
+
+# ゼノギアスの逆コンパイル
+
+**ゲームを後世に残す。1 バイトたがわず組み直す。**
+
+[![Tool checks](https://github.com/EtherAura/xenogears/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EtherAura/xenogears/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml/badge.svg)](https://github.com/EtherAura/xenogears/actions/workflows/codeql.yml)
+[![GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
+![US and JP](https://img.shields.io/badge/retail-US%20%2B%20JP-627eaa)
+
+PlayStation 版ゼノギアスのマッチング逆コンパイル（ビルドすると製品版と 1 バイト単位で一致する逆コンパイル）です。北米版と日本版で C のソースを共有しています。非公式のゲーム保存活動 **-Project Exodus-** の一部です。
+
+[**手持ちのディスクからビルド**](docs/Building-ja.md) · [**マッチングガイド**](docs/Matching-ja.md) · [**PC 移植版**](https://github.com/EtherAura/xenogears-pc) · [**開発に参加**](CONTRIBUTING.ja.md)
+
+![手持ちのディスクから、抽出と再ビルドを経て、製品版とのバイト単位の比較に至るまでの流れ](docs/img/matching.svg)
+</div>
+
+**ディスクはご自身でご用意ください。** ゲームデータは含まれていません。GitHub の CI ではツールと設定を検査し、製品版との一致はお手元のディスクイメージを使ってローカルで検査します。
+
+**マッチングの進み具合。** 計測した北米版と日本版のビルドでは、コードのバイト数の約 98.2% が、製品版と一致する C になっています。どちらの版も、製品版の 25 個のコードモジュールすべてを 1 バイト単位で再ビルドできます。製品版との一致を確認したビルドで [C で書かれた割合を計測](tools/progress.py)できます。
+
+**ビルド環境。** 公開しているビルドガイドは Linux x86-64 向けです。FreeBSD 15.1 amd64 でも、互換性のための修正をローカルで加えたテストで、どちらの版も製品版の 25 個のコードモジュールすべてを再ビルドし、検証できました。
+
+[ツールと謝辞](docs/Tooling-ja.md) · [セキュリティ](SECURITY.ja.md) · [ディスカッション](https://github.com/EtherAura/xenogears/discussions)
+
+<sub>本プロジェクトの成果物: GPL-3.0 以降。Xenogears © Square Enix。非公式であり、権利者とは関係ありません。</sub>

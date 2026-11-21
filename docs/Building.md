@@ -1,3 +1,5 @@
+English | [日本語](Building-ja.md)
+
 # Building
 
 This page takes you from a fresh clone to a build that matches the retail game.

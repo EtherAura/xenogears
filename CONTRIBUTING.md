@@ -1,3 +1,5 @@
+English | [日本語](CONTRIBUTING.ja.md)
+
 # Contributing
 
 Thank you for considering it. Matched functions, better names, fixes to the
