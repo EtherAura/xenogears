@@ -20,6 +20,13 @@ Part of **-Project Exodus-**, an unofficial preservation effort.
 **Bring your own discs.** No game data is included. GitHub CI checks tools and configuration;
 retail matching is checked locally against your images.
 
+**Matching progress.** About 98.2% of code bytes match in C in the measured US and
+Japanese builds. All 25 retail code modules per release rebuild byte-for-byte.
+[Measure C coverage](tools/progress.py) with the retail-verified builds.
+
+**Build hosts.** The published build guide targets Linux x86-64. A FreeBSD 15.1 amd64
+test with local compatibility fixes rebuilt and verified all 25 retail code modules per release.
+
 [Tools and project credits](docs/Tooling.md) · [Security](SECURITY.md) · [Discussions](https://github.com/EtherAura/xenogears/discussions)
 
 <sub>Project work: GPL-3.0 or later. Xenogears © Square Enix. Unofficial and unaffiliated.</sub>
