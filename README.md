@@ -32,9 +32,19 @@ you build. All 25 retail code modules per release rebuild byte-for-byte.
 [config/handwritten.yaml](config/handwritten.yaml) lists the hand-written routines and
 the evidence for each.
 
+<a id="original-work"></a>
+**Original work.** The C here was written for this project, with AI assistance (Claude),
+from the retail program's machine code, and a function counts as matched only when it
+compiles to the retail bytes.
+Nothing was copied from another decompilation of the game. Other projects, the hardware
+documentation and emulators were references for facts only: an address, which compiler
+built a file, how the hardware behaves. Function names follow yaz0r's
+[Noah](https://github.com/yaz0r/Noah) where it names the same code;
+[Tools and project credits](docs/Tooling.md) credits the tools and references.
+
 **Build hosts.** The published build guide targets Linux x86-64. A FreeBSD 15.1 amd64
 test with local compatibility fixes rebuilt and verified all 25 retail code modules per release.
 
-[Tools and project credits](docs/Tooling.md) · [Security](SECURITY.md) · [Discussions](https://github.com/EtherAura/xenogears/discussions)
+[Tools and project credits](docs/Tooling.md) · [Security](SECURITY.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Discussions](https://github.com/EtherAura/xenogears/discussions)
 
 <sub>Project work: GPL-3.0 or later. Xenogears © Square Enix. Unofficial and unaffiliated.</sub>
