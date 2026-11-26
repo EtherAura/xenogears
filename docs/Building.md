@@ -12,6 +12,25 @@ Follow the steps below with your own disc images.
 - Your own disc images of the US (SLUS-00664) or Japanese (SLPS-01160) release.
   Nothing from the game is in this repository.
 
+On FreeBSD 15.1 amd64, the native bootstrap was exercised with Bash, curl, Git,
+GNU make (`gmake`), Texinfo, Ninja, and Python 3.12. The pinned `cc1` and
+`objdiff-cli` executables use the `linux` and `linux64` compatibility modules.
+The bootstrap sets the Linux ELF brand on the installed `objdiff-cli` copy and
+checks the original download against the upstream hash.
+
+With the FreeBSD packages `rust`, `py312-pip`, `py312-maturin`, `py312-wheel`,
+and `py312-setuptools` installed, build the `crunch64` dependency before setup.
+Then run the standard project bootstrap as a regular user.
+
+```bash
+python3.12 -m venv .venv
+PYTHONPATH=/usr/local/lib/python3.12/site-packages \
+  .venv/bin/python -m pip install --no-build-isolation crunch64==0.6.2
+bash tools/setup.sh
+```
+
+The FreeBSD US and JP retail-matching checks are tracked in `xg-q58j`.
+
 ## 1. Set up the toolchain
 
 ```bash
